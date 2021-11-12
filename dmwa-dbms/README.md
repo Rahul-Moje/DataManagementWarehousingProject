@@ -1,18 +1,5 @@
-## Getting Started
+The project aims at development of a Database Management platform, capable of performing most of the database operations such as query execution, transaction and log management, reverse engineering and export. The implementation includes validation of the query requested by the user and parsing of the data in the correct format for accurate processing. Parsing would consider the various data types and load the data in-memory for seamless handling of the modification and retrieval requests.
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+As part of the project, we would also be developing Reverse engineering feature to extract various tables, their relationships among each other along with the cardinalities. Moreover, the Analytics module will be providing user with the information like the number of valid queries done on an xyz database by an abc user. Log management module plays an integral role for execution of transactions and for the analysis.
 
-## Folder Structure
-
-The workspace contains two folders by default, where:
-
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
-
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
-
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
-
-## Dependency Management
-
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+In a nutshell, the whole idea of this project is to implement and understand the functioning of a typical centralized database, its management system and analytics operation

@@ -12,7 +12,7 @@ import org.json.JSONObject;
 
 public class UserProfileIO {
 
-    String file_name = "USER_PROFILE.txt";
+    String file_name = ".//metadata//USER_PROFILE.txt";
     public LoginRegisterStatus add_user(UserLoginDetails userLoginDetails) {
 
         
