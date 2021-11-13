@@ -32,5 +32,9 @@ public class Utility {
         }
         return input;
     }
+
+    public static boolean is_null_empty(String input_str) {
+        return input_str != null && !input_str.trim().isEmpty();
+    }
     
 }

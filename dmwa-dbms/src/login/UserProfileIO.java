@@ -14,8 +14,6 @@ public class UserProfileIO {
 
     String file_name = ".//metadata//USER_PROFILE.txt";
     public LoginRegisterStatus add_user(UserLoginDetails userLoginDetails) {
-
-        
             JSONObject file_content;
             try {
                 file_content = fetch_file_content();
@@ -28,7 +26,7 @@ public class UserProfileIO {
             if(file_content!=null){
                 Set<String> usernames = file_content.keySet();
                 exisitng_username = usernames.stream()
-                                            .filter(username -> userLoginDetails.getUsername().equalsIgnoreCase(username))
+                                            .filter(username -> userLoginDetails.getUsername_encrypted().equalsIgnoreCase(username))
                                             .findFirst();
             }
                 
@@ -44,10 +42,6 @@ public class UserProfileIO {
             else{
                 return LoginRegisterStatus.USER_ALREADY_EXISTS;
             }
-            
-
-                
-       
     }
 
     private JSONObject fetch_file_content() throws IOException{
@@ -74,7 +68,7 @@ public class UserProfileIO {
             file_content = new JSONObject();
         }
 
-        file_content.put(Cryption.encrypt(userLoginDetails.getUsername()), value_part);
+        file_content.put(Cryption.encrypt(userLoginDetails.getUsername_encrypted()), value_part);
         fileWriter.write(file_content.toString());
         fileWriter.flush();
         fileWriter.close();
@@ -84,7 +78,7 @@ public class UserProfileIO {
 
     public UserLoginDetails check_credentials(String username, String password) {
         JSONObject file_content;
-        String username_lowercase = username.toLowerCase();
+        String username_uppercase = username.toUpperCase();
         try {
             file_content = fetch_file_content();
         } catch (IOException e) {
@@ -93,12 +87,13 @@ public class UserProfileIO {
         }
         if(file_content!=null){
             for(String username_from_file : file_content.keySet()){
-                if(Cryption.matches_encoded_value(username_lowercase, username_from_file)){
+                if(Cryption.matches_encoded_value(username_uppercase, username_from_file)){
                     JSONObject login_details = file_content.getJSONObject(username_from_file);
                     String password_from_file= login_details.getString("password");
                     if(Cryption.matches_encoded_value(password, password_from_file)){
                         UserLoginDetails userLoginDetails = new UserLoginDetails(
-                                                        username_from_file, 
+                                                        username_from_file,
+                                                        username_uppercase, 
                                                         password_from_file, 
                                                         login_details.getString("security_question"), 
                                                         login_details.getString("security_answer"));
