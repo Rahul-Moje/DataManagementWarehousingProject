@@ -1,22 +1,20 @@
 package login;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Optional;
 import java.util.Set;
-
-import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
+
+import common.Utility;
 
 public class UserProfileIO {
 
     String file_name = ".//metadata//USER_PROFILE.txt";
-    public LoginRegisterStatus add_user(UserLoginDetails userLoginDetails) {
+
+    public LoginRegisterStatus add_user(User userLoginDetails) {
             JSONObject file_content;
             try {
-                file_content = fetch_file_content();
+                file_content = new JSONObject(Utility.fetch_file_content(file_name));
             } catch (IOException e1) {
                 e1.printStackTrace();
                 return LoginRegisterStatus.SYSTEM_ERROR;
@@ -44,20 +42,7 @@ public class UserProfileIO {
             }
     }
 
-    private JSONObject fetch_file_content() throws IOException{
-        File file = new File(file_name);
-        if (file.exists()){
-            String info="";
-           
-            InputStream inputStream = new FileInputStream(file_name);
-            info = IOUtils.toString(inputStream, "UTF-8");
-            
-            return new JSONObject(info);
-        }
-        return null;
-    }
-
-    private void write_in_file(UserLoginDetails userLoginDetails, JSONObject file_content) throws IOException{
+    private void write_in_file(User userLoginDetails, JSONObject file_content) throws IOException{
         FileWriter fileWriter = new FileWriter(file_name, false);
         JSONObject value_part = new JSONObject();
         value_part.put("password", Cryption.encrypt(userLoginDetails.getPassword()));
@@ -76,11 +61,11 @@ public class UserProfileIO {
 
     }
 
-    public UserLoginDetails check_credentials(String username, String password) {
+    public User check_credentials(String username, String password) {
         JSONObject file_content;
         String username_uppercase = username.toUpperCase();
         try {
-            file_content = fetch_file_content();
+            file_content = new JSONObject(Utility.fetch_file_content(file_name));
         } catch (IOException e) {
             e.printStackTrace();
             return null;
@@ -91,7 +76,7 @@ public class UserProfileIO {
                     JSONObject login_details = file_content.getJSONObject(username_from_file);
                     String password_from_file= login_details.getString("password");
                     if(Cryption.matches_encoded_value(password, password_from_file)){
-                        UserLoginDetails userLoginDetails = new UserLoginDetails(
+                        User userLoginDetails = new User(
                                                         username_from_file,
                                                         username_uppercase, 
                                                         password_from_file, 

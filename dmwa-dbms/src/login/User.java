@@ -2,7 +2,7 @@ package login;
 
 import common.Utility;
 
-public class UserLoginDetails {
+public class User {
 
     String username_encrypted;
     String username_plain;
@@ -11,7 +11,7 @@ public class UserLoginDetails {
     String security_answer;
 
     
-    public UserLoginDetails(String username_encrypted, String username_plain, String password, String security_question,
+    public User(String username_encrypted, String username_plain, String password, String security_question,
             String security_answer) {
         this.username_encrypted = username_encrypted;
         this.username_plain = username_plain;

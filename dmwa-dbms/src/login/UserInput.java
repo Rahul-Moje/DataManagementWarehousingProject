@@ -23,7 +23,7 @@ public class UserInput {
         String username = Utility.enterInConsole("Enter username:", console);
         String password = Utility.enterInConsole("Enter password:", console);
         UserProfileIO userProfileIO = new UserProfileIO();
-        UserLoginDetails userLoginDetails = userProfileIO.check_credentials(username, password);
+        User userLoginDetails = userProfileIO.check_credentials(username, password);
         if(userLoginDetails != null){
             int count = 1;
             while(count<=3){
@@ -54,7 +54,7 @@ public class UserInput {
             String password = Utility.enterInConsole("Enter password:", console);
             String security_question = Utility.enterInConsole("Enter a security question:", console);
             String security_question_answer = Utility.enterInConsole("Answer of the security question:", console);
-            UserLoginDetails userLoginDetails = new UserLoginDetails(null, username, password, security_question, security_question_answer);
+            User userLoginDetails = new User(null, username, password, security_question, security_question_answer);
             UserProfileIO userProfileIO = new UserProfileIO();
             result= userProfileIO.add_user(userLoginDetails);    
             if(result == LoginRegisterStatus.SUCCESS){
