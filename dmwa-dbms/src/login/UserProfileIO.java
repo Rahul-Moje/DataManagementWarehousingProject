@@ -15,9 +15,8 @@ public class UserProfileIO {
         File file = new File(file_name);
         if(!file.exists()) {
             file.getParentFile().mkdirs();
-            FileWriter fileWriter;
             try {
-                fileWriter = new FileWriter(file_name, false);
+                FileWriter fileWriter = new FileWriter(file_name, false);
                 fileWriter.write(new JSONObject().toString());
                 fileWriter.flush();
                 fileWriter.close();

@@ -1,25 +1,28 @@
 package login;
 
-import java.io.File;
-
 import analytics.AnalyticsDriver;
+import common.DatabaseOperation;
 import data_model.DataModelDriver;
 import export.ExportDriver;
+import log_management.Log;
+import log_management.LogWriter;
 import queries.QueryDriver;
 
 public class LoginDriver {
 
     static UserInput userInput;
+    static LogWriter log_writer;
 
     static{
         userInput = new UserInput();
+        log_writer = new LogWriter();
     }
 
     public static void main(String[] args) {
         form();
     }
 
-    private static void form(){
+    private static void form() {
 
         String input_for_login_registration = userInput.input_for_login_registration();
 
@@ -38,18 +41,19 @@ public class LoginDriver {
 
         if(userInput.login()){
             System.out.println("Login successful!");
-            create_user_workspace(userInput.getUser().getUsername_encrypted());
+            User user = userInput.getUser();
+            new Log(user,
+                    DatabaseOperation.LOGIN, 
+                    "login", 
+                    user.getUsername_plain() + " logged in successfully"
+            );
+
             successful_login();
         }
         else{
             form();
         }
 
-    }
-
-    private static void create_user_workspace(String username_encrypted) {
-        File workspace = new File(String.format(".//workspace//%s", username_encrypted));
-        workspace.mkdirs();
     }
 
 

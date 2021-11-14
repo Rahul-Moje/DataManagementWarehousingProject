@@ -1,6 +1,6 @@
 package common;
 
-public enum  DatabaseOperations{
+public enum  DatabaseOperation{
     LOGIN,
     CREATE_DATABASE,
     CREATE_TABLE,
