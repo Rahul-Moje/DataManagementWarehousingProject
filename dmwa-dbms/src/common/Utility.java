@@ -47,10 +47,18 @@ public class Utility {
         return input_str != null && !input_str.trim().isEmpty();
     }
 
-    public static void check_create_directory(String file_path) {
+    public static void check_create_file_path(String file_path) {
         File file = new File(file_path);
         if(!file.exists()){
             file.getParentFile().mkdirs();
+        }
+            
+    }
+
+    public static void check_create_directory(String directory) {
+        File file = new File(directory);
+        if(!file.exists()){
+            file.mkdirs();
         }
             
     }

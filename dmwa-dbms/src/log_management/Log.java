@@ -2,24 +2,26 @@ package log_management;
 
 import java.time.LocalDateTime;
 
-import common.DatabaseOperations;
+import common.DatabaseOperation;
 import login.User;
 
 public class Log {
 
     User user;
     LocalDateTime timestamp;
-    DatabaseOperations query_type;
+    DatabaseOperation database_operation;
     String query;
     String result;
 
 
-    public Log(User user, LocalDateTime timestamp, DatabaseOperations query_type, String query, String result) {
+    public Log(User user, DatabaseOperation database_operation, String query, String result) {
         this.user = user;
-        this.timestamp = timestamp;
-        this.query_type = query_type;
+        this.timestamp = LocalDateTime.now();
+        this.database_operation = database_operation;
         this.query = query;
         this.result = result;
+
+        LogWriter.write(this);
     }
 
     public User getUser() {
@@ -38,12 +40,12 @@ public class Log {
         this.timestamp = timestamp;
     }
 
-    public DatabaseOperations getQuery_type() {
-        return query_type;
+    public DatabaseOperation getDatabase_operation() {
+        return database_operation;
     }
 
-    public void setQuery_type(DatabaseOperations query_type) {
-        this.query_type = query_type;
+    public void setQuery_type(DatabaseOperation database_operation) {
+        this.database_operation = database_operation;
     }
 
     public String getQuery() {
