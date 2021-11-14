@@ -53,7 +53,7 @@ public class UserProfileIO {
             file_content = new JSONObject();
         }
 
-        file_content.put(Cryption.encrypt(userLoginDetails.getUsername_encrypted()), value_part);
+        file_content.put(userLoginDetails.getUsername_encrypted(), value_part);
         fileWriter.write(file_content.toString());
         fileWriter.flush();
         fileWriter.close();
@@ -73,6 +73,7 @@ public class UserProfileIO {
         if(file_content!=null){
             for(String username_from_file : file_content.keySet()){
                 if(Cryption.matches_encoded_value(username_uppercase, username_from_file)){
+
                     JSONObject login_details = file_content.getJSONObject(username_from_file);
                     String password_from_file= login_details.getString("password");
                     if(Cryption.matches_encoded_value(password, password_from_file)){

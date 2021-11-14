@@ -24,7 +24,7 @@ public class Utility {
         System.exit(0);
     }
 
-    public static String enterInConsole(String question, Console console){
+    public static String enter_in_console(String question, Console console){
         
         boolean isSure = false;
         String input= "";
@@ -39,7 +39,7 @@ public class Utility {
         return input;
     }
 
-    public static boolean is_null_empty(String input_str) {
+    public static boolean is_not_null_empty(String input_str) {
         return input_str != null && !input_str.trim().isEmpty();
     }
 

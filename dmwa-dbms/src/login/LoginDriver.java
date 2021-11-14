@@ -1,5 +1,7 @@
 package login;
 
+import java.io.File;
+
 import analytics.AnalyticsDriver;
 import data_model.DataModelDriver;
 import export.ExportDriver;
@@ -35,6 +37,8 @@ public class LoginDriver {
     private static void login_workflow() {
 
         if(userInput.login()){
+            System.out.println("Login successful!");
+            create_user_workspace(userInput.getUser().getUsername_encrypted());
             successful_login();
         }
         else{
@@ -42,6 +46,12 @@ public class LoginDriver {
         }
 
     }
+
+    private static void create_user_workspace(String username_encrypted) {
+        File workspace = new File(String.format(".//workspace//%s", username_encrypted));
+        workspace.mkdirs();
+    }
+
 
     private static void successful_login(){
         String dbms_option = userInput.select_dbms_operation();

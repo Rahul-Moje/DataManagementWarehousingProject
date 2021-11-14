@@ -1,6 +1,7 @@
-package queries;
+package common;
 
-public enum  QueryType{
+public enum  DatabaseOperations{
+    LOGIN,
     CREATE_DATABASE,
     CREATE_TABLE,
     SELECT,

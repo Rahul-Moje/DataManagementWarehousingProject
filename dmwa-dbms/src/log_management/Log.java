@@ -2,19 +2,19 @@ package log_management;
 
 import java.time.LocalDateTime;
 
+import common.DatabaseOperations;
 import login.User;
-import queries.QueryType;
 
 public class Log {
 
     User user;
     LocalDateTime timestamp;
-    QueryType query_type;
+    DatabaseOperations query_type;
     String query;
     String result;
 
 
-    public Log(User user, LocalDateTime timestamp, QueryType query_type, String query, String result) {
+    public Log(User user, LocalDateTime timestamp, DatabaseOperations query_type, String query, String result) {
         this.user = user;
         this.timestamp = timestamp;
         this.query_type = query_type;
@@ -38,11 +38,11 @@ public class Log {
         this.timestamp = timestamp;
     }
 
-    public QueryType getQuery_type() {
+    public DatabaseOperations getQuery_type() {
         return query_type;
     }
 
-    public void setQuery_type(QueryType query_type) {
+    public void setQuery_type(DatabaseOperations query_type) {
         this.query_type = query_type;
     }
 
