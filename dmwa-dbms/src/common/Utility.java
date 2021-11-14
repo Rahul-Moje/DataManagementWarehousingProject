@@ -47,6 +47,14 @@ public class Utility {
         return input_str != null && !input_str.trim().isEmpty();
     }
 
+    public static void check_create_directory(String file_path) {
+        File file = new File(file_path);
+        if(!file.exists()){
+            file.getParentFile().mkdirs();
+        }
+            
+    }
+
     public static String fetch_file_content(String file_name) throws IOException{
         File file = new File(file_name);
         if (file.exists()){

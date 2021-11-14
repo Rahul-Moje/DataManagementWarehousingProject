@@ -1,6 +1,5 @@
 package log_management;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -25,6 +24,7 @@ public class LogWriter {
         User user = this.log.getUser();
         String work_folder= user.getUsername_encrypted();
         file_name = String.format(file_name, work_folder);
+        Utility.check_create_directory(file_name);
     }
 
     public void write_log() {
@@ -32,9 +32,6 @@ public class LogWriter {
         try {
             String file_content_str= Utility.fetch_file_content(file_name);
             file_content = file_content_str != null ? new JSONArray(file_content_str) : new JSONArray();
-
-            File file = new File(file_name);
-            file.mkdirs();
 
             FileWriter fileWriter = new FileWriter(file_name, false);
             JSONObject log_entry = new JSONObject();
