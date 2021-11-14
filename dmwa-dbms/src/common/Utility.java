@@ -1,7 +1,13 @@
 package common;
 
 import java.io.Console;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.concurrent.TimeUnit;
+
+import org.apache.commons.io.IOUtils;
 
 public class Utility {
 
@@ -35,6 +41,19 @@ public class Utility {
 
     public static boolean is_null_empty(String input_str) {
         return input_str != null && !input_str.trim().isEmpty();
+    }
+
+    public static String fetch_file_content(String file_name) throws IOException{
+        File file = new File(file_name);
+        if (file.exists()){
+            String info="";
+           
+            InputStream inputStream = new FileInputStream(file_name);
+            info = IOUtils.toString(inputStream, "UTF-8");
+            
+            return info;
+        }
+        return null;
     }
     
 }
