@@ -6,13 +6,18 @@ import common.Utility;
 public class UserInput {
 
     static Console console;
+    User user;
 
     public UserInput(){
         console = System.console();
     }
 
+    public User getUser(){
+        return this.user;
+    }
+
     public String input_for_login_registration(){
-        return Utility.enterInConsole("Choose from following options (1/2):"
+        return Utility.enter_in_console("Choose from following options (1/2):"
                                     +"\n1. Login"
                                     +"\n2. Register", console);
     }
@@ -20,16 +25,15 @@ public class UserInput {
     public boolean login(){
         System.out.println("\n\n\t\t\t*********** Login ************\t\t\t\n"); 
 
-        String username = Utility.enterInConsole("Enter username:", console);
-        String password = Utility.enterInConsole("Enter password:", console);
+        String username = Utility.enter_in_console("Enter username:", console);
+        String password = Utility.enter_in_console("Enter password:", console);
         UserProfileIO userProfileIO = new UserProfileIO();
-        User userLoginDetails = userProfileIO.check_credentials(username, password);
-        if(userLoginDetails != null){
+        user = userProfileIO.check_credentials(username, password);
+        if(user != null){
             int count = 1;
             while(count<=3){
-                String input_answer = Utility.enterInConsole("Security Question : "+userLoginDetails.getSecurity_question(), console);
-                if(input_answer.equalsIgnoreCase(userLoginDetails.getSecurity_answer())){
-                    System.out.println("Login successful!");
+                String input_answer = Utility.enter_in_console("Security Question : "+user.getSecurity_question(), console);
+                if(input_answer.equalsIgnoreCase(user.getSecurity_answer())){
                     return true;
                 }
                 else{
@@ -47,16 +51,20 @@ public class UserInput {
     }
 
     public boolean register(){
+
         System.out.println("\n\n\t\t\t*********** Register ************\t\t\t\n"); 
         LoginRegisterStatus result = LoginRegisterStatus.USER_ALREADY_EXISTS;
+
         while(result == LoginRegisterStatus.USER_ALREADY_EXISTS){
-            String username = Utility.enterInConsole("Enter username:", console);
-            String password = Utility.enterInConsole("Enter password:", console);
-            String security_question = Utility.enterInConsole("Enter a security question:", console);
-            String security_question_answer = Utility.enterInConsole("Answer of the security question:", console);
-            User userLoginDetails = new User(null, username, password, security_question, security_question_answer);
+            String username = Utility.enter_in_console("Enter username:", console);
+            String password = Utility.enter_in_console("Enter password:", console);
+            String security_question = Utility.enter_in_console("Enter a security question:", console);
+            String security_question_answer = Utility.enter_in_console("Answer of the security question:", console);
+            user = new User(null, username, password, security_question, security_question_answer);
             UserProfileIO userProfileIO = new UserProfileIO();
-            result= userProfileIO.add_user(userLoginDetails);    
+            
+            //System.out.println(user.toString());
+            result= userProfileIO.add_user(user);    
             if(result == LoginRegisterStatus.SUCCESS){
                 System.out.println("Registered successfully!");
                 System.out.println("Redirecting to login...");
@@ -77,7 +85,7 @@ public class UserInput {
     }
 
     public String select_dbms_operation(){
-        return Utility.enterInConsole("Choose from following options (1/2/3/4): "
+        return Utility.enter_in_console("Choose from following options (1/2/3/4): "
                                     +"\n1. Write Queries "
                                     +"\n2. Export "
                                     +"\n3. Data Model "

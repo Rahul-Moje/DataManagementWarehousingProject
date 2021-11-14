@@ -24,13 +24,17 @@ public class Utility {
         System.exit(0);
     }
 
-    public static String enterInConsole(String question, Console console){
+    public static String enter_in_console(String question, Console console){
         
         boolean isSure = false;
         String input= "";
         while(!isSure){
             System.out.println(question);
             input= console.readLine();
+            if(!is_not_null_empty(input)){
+                System.out.println("Input cannot be blank. Enter again.");
+                return enter_in_console(question, console);
+            }
 
             //System.out.println("Are you sure? (Y/N)");
             //isSure= console.readLine().equalsIgnoreCase("Y") ? true : false;
@@ -39,7 +43,7 @@ public class Utility {
         return input;
     }
 
-    public static boolean is_null_empty(String input_str) {
+    public static boolean is_not_null_empty(String input_str) {
         return input_str != null && !input_str.trim().isEmpty();
     }
 

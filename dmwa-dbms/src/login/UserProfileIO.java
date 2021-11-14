@@ -1,4 +1,5 @@
 package login;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Optional;
@@ -9,7 +10,25 @@ import common.Utility;
 
 public class UserProfileIO {
 
-    String file_name = ".//metadata//USER_PROFILE.txt";
+    static String file_name = ".//metadata//USER_PROFILE.txt";
+    static{
+        File file = new File(file_name);
+        if(!file.exists()) {
+            file.getParentFile().mkdirs();
+            FileWriter fileWriter;
+            try {
+                fileWriter = new FileWriter(file_name, false);
+                fileWriter.write(new JSONObject().toString());
+                fileWriter.flush();
+                fileWriter.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+                Utility.system_abort();
+            }
+            
+        }
+        
+    }
 
     public LoginRegisterStatus add_user(User userLoginDetails) {
             JSONObject file_content;
@@ -53,7 +72,7 @@ public class UserProfileIO {
             file_content = new JSONObject();
         }
 
-        file_content.put(Cryption.encrypt(userLoginDetails.getUsername_encrypted()), value_part);
+        file_content.put(userLoginDetails.getUsername_encrypted(), value_part);
         fileWriter.write(file_content.toString());
         fileWriter.flush();
         fileWriter.close();
@@ -73,6 +92,7 @@ public class UserProfileIO {
         if(file_content!=null){
             for(String username_from_file : file_content.keySet()){
                 if(Cryption.matches_encoded_value(username_uppercase, username_from_file)){
+
                     JSONObject login_details = file_content.getJSONObject(username_from_file);
                     String password_from_file= login_details.getString("password");
                     if(Cryption.matches_encoded_value(password, password_from_file)){

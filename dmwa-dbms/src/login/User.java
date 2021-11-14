@@ -14,9 +14,10 @@ public class User {
     public User(String username_encrypted, String username_plain, String password, String security_question,
             String security_answer) {
         this.username_encrypted = username_encrypted;
-        this.username_plain = username_plain;
-        if(Utility.is_null_empty(username_encrypted) && !Utility.is_null_empty(this.username_plain)){
-            this.username_encrypted = Cryption.encrypt(username_encrypted);
+        this.username_plain = username_plain.toUpperCase();
+        if(!Utility.is_not_null_empty(username_encrypted) && Utility.is_not_null_empty(this.username_plain)){
+            System.out.println("encypting username");
+            this.username_encrypted = Cryption.encrypt(this.username_plain);
         }
         this.password = password;
         this.security_question = security_question;
@@ -70,6 +71,14 @@ public class User {
 
     public void setSecurity_answer(String security_answer) {
         this.security_answer = security_answer;
+    }
+
+
+    @Override
+    public String toString() {
+        return "User [password=" + password + ", security_answer=" + security_answer + ", security_question="
+                + security_question + ", username_encrypted=" + username_encrypted + ", username_plain="
+                + username_plain + "]";
     }
 
     
