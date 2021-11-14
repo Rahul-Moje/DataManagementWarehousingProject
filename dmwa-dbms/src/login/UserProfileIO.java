@@ -1,4 +1,5 @@
 package login;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Optional;
@@ -9,7 +10,25 @@ import common.Utility;
 
 public class UserProfileIO {
 
-    String file_name = ".//metadata//USER_PROFILE.txt";
+    static String file_name = ".//metadata//USER_PROFILE.txt";
+    static{
+        File file = new File(file_name);
+        if(!file.exists()) {
+            file.getParentFile().mkdirs();
+            FileWriter fileWriter;
+            try {
+                fileWriter = new FileWriter(file_name, false);
+                fileWriter.write(new JSONObject().toString());
+                fileWriter.flush();
+                fileWriter.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+                Utility.system_abort();
+            }
+            
+        }
+        
+    }
 
     public LoginRegisterStatus add_user(User userLoginDetails) {
             JSONObject file_content;

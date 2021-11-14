@@ -31,6 +31,10 @@ public class Utility {
         while(!isSure){
             System.out.println(question);
             input= console.readLine();
+            if(!is_not_null_empty(input)){
+                System.out.println("Input cannot be blank. Enter again.");
+                return enter_in_console(question, console);
+            }
 
             //System.out.println("Are you sure? (Y/N)");
             //isSure= console.readLine().equalsIgnoreCase("Y") ? true : false;

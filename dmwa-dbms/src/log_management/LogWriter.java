@@ -34,7 +34,7 @@ public class LogWriter {
             file_content = file_content_str != null ? new JSONArray(file_content_str) : new JSONArray();
 
             File file = new File(file_name);
-            file.getParentFile().mkdirs();
+            file.mkdirs();
 
             FileWriter fileWriter = new FileWriter(file_name, false);
             JSONObject log_entry = new JSONObject();
