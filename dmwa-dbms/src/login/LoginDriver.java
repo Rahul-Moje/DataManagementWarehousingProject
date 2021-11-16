@@ -60,7 +60,7 @@ public class LoginDriver {
     private static void successful_login(){
         String dbms_option = userInput.select_dbms_operation();
         if(dbms_option.equals("1")){
-            QueryDriver.run();
+            new QueryDriver().run();
         }
         else if(dbms_option.equals("2")){
             ExportDriver.run();
