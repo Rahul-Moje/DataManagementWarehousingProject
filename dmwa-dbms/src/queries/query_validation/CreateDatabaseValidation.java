@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-public class CreateDatabase {
+public class CreateDatabaseValidation {
 
     public String validate(String query, String workspace_folder) {
 
@@ -13,16 +13,13 @@ public class CreateDatabase {
             query = query.substring(0, query.length()-1);
         }
 
-        query = query.replaceAll("\\s", " ");
-
         List<String> tokens = new ArrayList<String>();
         StringTokenizer tokenizer = new StringTokenizer(query, " ");
         while(tokenizer.hasMoreTokens()){
             tokens.add(tokenizer.nextToken());
         }
-
-        if(tokens.size() > 3) {
-            return "Syntax error. Query has more than 3 tokens.";
+        if(tokens.size() != 3) {
+            return "Syntax error.";
         }
         else{
             return check_db_exists(tokens.get(2), workspace_folder);

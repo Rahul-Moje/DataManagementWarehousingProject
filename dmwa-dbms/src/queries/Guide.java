@@ -9,7 +9,7 @@ public class Guide {
 
         String database_queries = "Query to: \n\n"
                         +"1. Create database : create database <database_name>;\n\n"
-                        +"2. Use database : user database <database_name>;\n\n"
+                        +"2. Use database : use database <database_name>;\n\n"
                         +"3. Create table : create table <table_name> (<column1> text, "
                         +"<column2> int, <column3> float, <column3> date);\n\n"
                         +"4. Insert value in table: insert : insert into <table_name> values (\"Rita\", 100, 100, 2021-01-01);\n\n"

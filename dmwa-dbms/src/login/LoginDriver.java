@@ -57,10 +57,10 @@ public class LoginDriver {
     }
 
 
-    private static void successful_login(){
+    public static void successful_login(){
         String dbms_option = userInput.select_dbms_operation();
         if(dbms_option.equals("1")){
-            new QueryDriver().run();
+            new QueryDriver(userInput.getUser()).run();
         }
         else if(dbms_option.equals("2")){
             ExportDriver.run();
@@ -71,6 +71,8 @@ public class LoginDriver {
         else if(dbms_option.equals("4")){
             AnalyticsDriver.run();
         }
+
+        successful_login();
     }
     
 }

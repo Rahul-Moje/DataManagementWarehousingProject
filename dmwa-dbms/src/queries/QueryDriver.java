@@ -4,13 +4,17 @@ package queries;
 import java.io.Console;
 
 import common.Utility;
+import login.User;
+import queries.query_execution.QueryIdentifier;
 
 public class QueryDriver {
 
     Console console;
+    User user;
 
-    public QueryDriver(){
+    public QueryDriver(User user){
         console = System.console();
+        this.user = user;
     }
 
     public void run() {
@@ -32,10 +36,19 @@ public class QueryDriver {
         }
     }
 
-    private void transaction_execution() {
+    private void single_query_execution() {
+
+        String query = Utility.enter_in_console("Enter query or press 1 to go back to menu: ", console);
+        QueryIdentifier queryIdentifier= new QueryIdentifier(query, user.getUsername_encrypted());
+        while(!query.equals("1")){
+            queryIdentifier.run();
+            query = Utility.enter_in_console("Enter query or press 1 to go back to menu: ", console);
+        }
+        
     }
 
-    private void single_query_execution() {
+    private void transaction_execution() {
+        
     }
     
 }
