@@ -6,6 +6,7 @@ public class CreateDatabase {
 
     public boolean execute(String query, String workspace_folder){
         try{
+            
             if(query.endsWith(";")){
                 query = query.substring(0, query.length()-1);
             }
@@ -13,6 +14,7 @@ public class CreateDatabase {
             String db_name = tokens[tokens.length-1];
             String path = ".//workspace//"+workspace_folder+"//"+db_name;
             Utility.check_create_directory(path);
+
             return true;
         }
         catch(Exception e){
