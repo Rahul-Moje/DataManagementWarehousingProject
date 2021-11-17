@@ -62,42 +62,61 @@ public class QueryIdentifier {
                 new Log(user, DatabaseOperation.USE_DATABASE, query, result);
             }
         }
-        else if(query_for_condition.startsWith("create table")){
+        else {
             String workfolder_in_db = workspace_folder+"//"+selected_database;
-            //validation
-            Table table = new Table();
-            //System.out.println(table.toString());
-            CreateTableValidation validator = new CreateTableValidation();
-            error = validator.validate(query, workfolder_in_db, table);
-
-            
-            //execute
-            if(!Utility.is_not_null_empty(error)){ 
+            if(!Utility.is_not_null_empty(selected_database)){
+                error = "Database not selected. Please select a database using \"use database\" query.";
+            }
+            else if(query_for_condition.startsWith("create table")){
+                //validation
+                Table table = new Table();
                 //System.out.println(table.toString());
-                CreateTable executor = new CreateTable();
-                Boolean isSuccess= executor.execute(table, workfolder_in_db);  
-                if(isSuccess){
-                    String result = "Table created successfully";
-                    System.out.println(result);
-                    new Log(user, DatabaseOperation.CREATE_TABLE, query, result);
-                }  
+                CreateTableValidation validator = new CreateTableValidation();
+                error = validator.validate(query, workfolder_in_db, table);
+
+                
+                //execute
+                if(!Utility.is_not_null_empty(error)){ 
+                    //System.out.println(table.toString());
+                    CreateTable executor = new CreateTable();
+                    Boolean isSuccess= executor.execute(table, workfolder_in_db);  
+                    if(isSuccess){
+                        String result = "Table created successfully";
+                        System.out.println(result);
+                        new Log(user, DatabaseOperation.CREATE_TABLE, query, result);
+                    }  
+                }
+            }
+            else if(query_for_condition.startsWith("insert into")){
+
+                Table table = new Table();
+                InsertValidation validator = new InsertValidation();
+                error = validator.validate(query, workfolder_in_db, table);
+
+                if(!Utility.is_not_null_empty(error)){ 
+                    Insert executor = new Insert();
+                    Boolean isSuccess = executor.execute(table, workfolder_in_db);
+                    if(isSuccess){
+                        String result = table.getValues().length()+ " row(s) inserted successfully";
+                        System.out.println(result);
+                        new Log(user, DatabaseOperation.INSERT, query, result);
+                    }  
+                }
+            }
+            else if(query_for_condition.startsWith("select")){
+                
+            }
+            else if(query_for_condition.startsWith("update")){
+                
+            }
+            else if(query_for_condition.startsWith("delete from")){
+                
+            }
+            else if(query_for_condition.startsWith("drop table")){
+                
             }
         }
-        else if(query_for_condition.startsWith("insert into")){
-            
-        }
-        else if(query_for_condition.startsWith("select")){
-            
-        }
-        else if(query_for_condition.startsWith("update")){
-            
-        }
-        else if(query_for_condition.startsWith("delete from")){
-            
-        }
-        else if(query_for_condition.startsWith("drop table")){
-            
-        }
+        
 
         if(Utility.is_not_null_empty(error)){
             System.out.println("\n\n\t\t\t*********** Error Occurred ************\t\t\t\n");

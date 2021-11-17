@@ -1,11 +1,13 @@
 package queries.query_execution;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class Table {
 
     String table_name;
     JSONObject column_to_datatype;
+    JSONArray values;
 
     public void setTable_name(String table_name){
         this.table_name = table_name.toLowerCase();
@@ -30,9 +32,18 @@ public class Table {
         this.column_to_datatype.put(key.toLowerCase(), value);
     }
 
+    public void setValues(JSONArray values){
+        this.values = values;
+    }
+
+    public JSONArray getValues(){
+        return this.values;
+    }
+
     @Override
     public String toString() {
-        return "Table [column_to_datatype=" + column_to_datatype + ", table_name=" + table_name + "]";
+        return "Table [column_to_datatype=" + column_to_datatype + ", table_name=" + table_name + ", values=" + values
+                + "]";
     }
 
     

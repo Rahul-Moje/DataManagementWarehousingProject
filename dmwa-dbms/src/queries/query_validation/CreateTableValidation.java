@@ -16,7 +16,7 @@ import queries.query_execution.Table;
 public class CreateTableValidation {
 
     final List<String> valid_data_type = new ArrayList<String>(
-                                        Arrays.asList("text", "integer", "float", "date"));
+                                        Arrays.asList("nvarchar", "integer", "float", "date"));
 
     public String validate(String query, String workspace_folder, Table table) {
 
@@ -67,6 +67,7 @@ public class CreateTableValidation {
             }
         } catch (IOException e) {
             e.printStackTrace();
+            return "System error";
         }
         return null;
     }
