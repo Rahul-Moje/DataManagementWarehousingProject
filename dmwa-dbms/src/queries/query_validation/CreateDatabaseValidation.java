@@ -9,6 +9,7 @@ public class CreateDatabaseValidation {
 
     public String validate(String query, String workspace_folder) {
 
+        
         if(query.endsWith(";")){
             query = query.substring(0, query.length()-1);
         }

@@ -39,10 +39,11 @@ public class QueryDriver {
     private void single_query_execution() {
 
         String query = Utility.enter_in_console("Enter query or press 1 to go back to menu: ", console);
-        QueryIdentifier queryIdentifier= new QueryIdentifier(query, user.getUsername_encrypted());
+        QueryIdentifier queryIdentifier= new QueryIdentifier(query, user);
         while(!query.equals("1")){
             queryIdentifier.run();
             query = Utility.enter_in_console("Enter query or press 1 to go back to menu: ", console);
+            queryIdentifier.setQuery(query);
         }
         
     }
