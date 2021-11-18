@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import common.Constants;
 import common.Utility;
 
 public class Insert {
@@ -26,7 +27,7 @@ public class Insert {
             FileWriter file_writer = new FileWriter(file_path, false);
             String data="";
             if(!Utility.is_not_null_empty(file_content_str)){
-                data = String.join("~", col_datatype.keySet());
+                data = String.join(Constants.DELIMITER, col_datatype.keySet());
                 data+=line_separator;
             }
             else{
@@ -51,7 +52,7 @@ public class Insert {
                         default:
                             throw new Exception("Invalid data type: "+col_datatype.get(column_name));
                     }
-                    data +="~";
+                    data += Constants.DELIMITER;
                 }
                 data = data.substring(0, data.length()-1)+line_separator;
             }

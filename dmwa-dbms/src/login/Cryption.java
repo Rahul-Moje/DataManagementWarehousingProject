@@ -10,7 +10,7 @@ public class Cryption {
     }
 
     public static String encrypt(String input){
-        System.out.println("input--- "+input);
+        // System.out.println("input--- "+input);
         return Crypt.crypt(input, salt);
         
     }

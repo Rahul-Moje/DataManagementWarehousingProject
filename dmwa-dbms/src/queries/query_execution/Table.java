@@ -8,12 +8,21 @@ public class Table {
     String table_name;
     JSONObject column_to_datatype;
     JSONArray values;
+    String where_clause;
 
     public void setTable_name(String table_name){
         this.table_name = table_name.toLowerCase();
     }
 
     public String getTable_name(){
+        return this.table_name;
+    }
+
+    public void setWhere_Clause(String where_clause){
+        this.where_clause = where_clause;
+    }
+
+    public String getWhere_clause(){
         return this.table_name;
     }
 
