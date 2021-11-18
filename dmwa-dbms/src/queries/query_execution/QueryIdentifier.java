@@ -104,6 +104,20 @@ public class QueryIdentifier {
                 }
             }
             else if(query_for_condition.startsWith("select")){
+
+                Table table = new Table();
+                SelectValidation validator = new SelectValidation();
+                error = validator.validate(query, workfolder_in_db, table);
+
+                if(!Utility.is_not_null_empty(error)){ 
+                    Select executor = new Select();
+                    Boolean isSuccess = executor.execute(table);
+                    if(isSuccess) {
+                        String result = table.getValues().length()+ " row(s)";
+                        System.out.println(result);
+                        new Log(user, DatabaseOperation.INSERT, query, result);
+                    }  
+                }
                 
             }
             else if(query_for_condition.startsWith("update")){

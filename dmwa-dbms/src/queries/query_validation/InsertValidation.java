@@ -92,7 +92,7 @@ public class InsertValidation {
         return null;
     }
 
-    private String checkTable(Table table, String workspace_folder) {
+    public String checkTable(Table table, String workspace_folder) {
         String path = ".//workspace//"+workspace_folder+"//metadata//table_info.txt";
         String table_name = table.getTable_name();
         try {
@@ -100,14 +100,14 @@ public class InsertValidation {
             if(Utility.is_not_null_empty(file_content_str)){
                 JSONObject file_content = new JSONObject(file_content_str);
 
-                System.out.println("---file_content---"+file_content);
+                // System.out.println("---file_content---"+file_content);
 
                 if(!file_content.keySet().contains(table_name)){
                     return "Table not found.";
                 }
                 else{
                     JSONObject col_datatype = file_content.getJSONObject(table_name);
-                    System.out.println("---col_datatype---"+col_datatype);
+                    // System.out.println("---col_datatype---"+col_datatype);
                     table.setColumn_to_datatype(col_datatype);
                 }
             }

@@ -16,7 +16,7 @@ public class User {
         this.username_encrypted = username_encrypted;
         this.username_plain = username_plain.toUpperCase();
         if(!Utility.is_not_null_empty(username_encrypted) && Utility.is_not_null_empty(this.username_plain)){
-            System.out.println("encypting username");
+            // System.out.println("encypting username");
             this.username_encrypted = Cryption.encrypt(this.username_plain);
         }
         this.password = password;
