@@ -25,9 +25,17 @@ public class SelectValidation {
         if(Utility.is_not_null_empty(error)){
             return error;
         }
+        
+        error = new FilterValidation().validateWhereClause(query, table);
+        if(Utility.is_not_null_empty(error)){
+            return error;
+        }
+
         List<String> column_names_from_query = getColumns(query, table);
         // System.out.println("----column_names_from_query------: "+column_names_from_query);
         return populateDataFromFile(workfolder_in_db, table, column_names_from_query);
+
+        
 
     }
 

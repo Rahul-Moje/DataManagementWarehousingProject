@@ -49,6 +49,9 @@ public class CreateTableValidation {
             return error;
         }
 
+        //validate where_clause
+        
+
         //validate the values part
         return validate_values(query, table);
 
