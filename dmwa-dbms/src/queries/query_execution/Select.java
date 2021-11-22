@@ -15,6 +15,7 @@ public class Select {
     public Boolean execute(Table table) {
         
         try{
+            JSONArray filterted_rows = new JSONArray();
             JSONArray rows = table.getValues();
             Formatter fmt=new Formatter();
             JSONObject row_for_header = rows.getJSONObject(0);
@@ -37,9 +38,10 @@ public class Select {
                     fmt = new Formatter();
                     fmt.format(format, values.toArray());
                     System.out.println(fmt); 
+                    filterted_rows.put(row);
                 }
             }
-            
+            table.setValues(filterted_rows);
             fmt.close();
         }
         catch(Exception e){
