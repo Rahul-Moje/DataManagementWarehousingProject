@@ -9,6 +9,9 @@ public class Table {
     JSONObject column_to_datatype;
     JSONArray values;
     String where_clause;
+    String operator;
+    String lhs_column;
+    String rhs_value;
 
     public void setTable_name(String table_name){
         this.table_name = table_name.toLowerCase();
@@ -16,6 +19,22 @@ public class Table {
 
     public String getTable_name(){
         return this.table_name;
+    }
+
+    public String getLhs_column() {
+        return lhs_column;
+    }
+
+    public void setLhs_column(String lhs_column) {
+        this.lhs_column = lhs_column;
+    }
+
+    public String getRhs_value() {
+        return rhs_value;
+    }
+
+    public void setRhs_value(String rhs_value) {
+        this.rhs_value = rhs_value;
     }
 
     public void setWhere_Clause(String where_clause){
@@ -49,11 +68,26 @@ public class Table {
         return this.values;
     }
 
+    public void setOperator(String operator) {
+        this.operator = operator;
+    }
+
+    public void setWhere_clause(String where_clause) {
+        this.where_clause = where_clause;
+    }
+
+    public String getOperator() {
+        return operator;
+    }
+
     @Override
     public String toString() {
-        return "Table [column_to_datatype=" + column_to_datatype + ", table_name=" + table_name + ", values=" + values
-                + "]";
+        return "Table [column_to_datatype=" + column_to_datatype + ", lhs_column=" + lhs_column + ", operator="
+                + operator + ", rhs_value=" + rhs_value + ", table_name=" + table_name + ", values=" + values
+                + ", where_clause=" + where_clause + "]";
     }
+
+    
 
     
 }
