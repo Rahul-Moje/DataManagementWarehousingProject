@@ -69,7 +69,7 @@ public class LoginDriver {
             DataModelDriver.run();
         }
         else if(dbms_option.equals("4")){
-            AnalyticsDriver.run();
+            new AnalyticsDriver(userInput.getUser()).run();
         }
 
         successful_login();
