@@ -127,7 +127,19 @@ public class QueryIdentifier {
                 
             }
             else if(query_for_condition.startsWith("drop table")){
-                
+                Table table = new Table();
+                DropTableValidation validator = new DropTableValidation();
+                error = validator.validate(query, workfolder_in_db, table);
+
+                if(!Utility.is_not_null_empty(error)){ 
+                    DropTable executor = new DropTable();
+                    Boolean isSuccess = executor.execute(table, workfolder_in_db);
+                    if(isSuccess) {
+                        String result = "Table is dropped from the database";
+                        System.out.println(result);
+                        new Log(user, DatabaseOperation.DROP, selected_database, table.getTable_name(), query, result);
+                    }  
+                }
             }
         }
         

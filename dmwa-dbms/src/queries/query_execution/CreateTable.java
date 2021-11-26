@@ -40,7 +40,7 @@ public class CreateTable {
         
     }
 
-    private void write(String content) throws IOException{
+    public void write(String content) throws IOException{
         FileWriter fileWriter = new FileWriter(file_path, false);
         fileWriter.write(content);
         fileWriter.flush();
