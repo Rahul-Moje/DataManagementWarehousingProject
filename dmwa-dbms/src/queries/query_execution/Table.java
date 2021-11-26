@@ -13,6 +13,8 @@ public class Table {
     String operator;
     String lhs_column;
     String rhs_value;
+    String set_lhs_column;
+    String set_rhs_value;
 
     public String getDatabase() {
         return database;
@@ -94,6 +96,22 @@ public class Table {
         return "Table [column_to_datatype=" + column_to_datatype + ", lhs_column=" + lhs_column + ", operator="
                 + operator + ", rhs_value=" + rhs_value + ", table_name=" + table_name + ", values=" + values
                 + ", where_clause=" + where_clause + "]";
+    }
+
+    public void setSet_lhs_column(String set_lhs_column) {
+        this.set_lhs_column = set_lhs_column;
+    }
+
+    public String getSet_lhs_column() {
+        return set_lhs_column;
+    }
+
+    public void setSet_rhs_value(String set_rhs_value) {
+        this.set_rhs_value = set_rhs_value;
+    }
+
+    public String getSet_rhs_value(String set_rhs_value) {
+        return set_rhs_value;
     }
 
     

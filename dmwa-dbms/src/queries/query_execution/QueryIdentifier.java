@@ -121,12 +121,24 @@ public class QueryIdentifier {
                 
             }
             else if(query_for_condition.startsWith("update")){
-                
+                Table table = new Table();
+                UpdateTableValidation validator = new UpdateTableValidation();
+                error = validator.validate(query, workfolder_in_db, table);
+
+                if(!Utility.is_not_null_empty(error)){ 
+                    UpdateTable executor = new UpdateTable();
+                    Boolean isSuccess = executor.execute(table, workfolder_in_db);
+                    if(isSuccess) {
+                        String result = "Table is dropped from the database";
+                        System.out.println(result);
+                        new Log(user, DatabaseOperation.DROP, selected_database, table.getTable_name(), query, result);
+                    }  
+                }
             }
             else if(query_for_condition.startsWith("delete from")){
                 
             }
-            else if(query_for_condition.startsWith("drop table")){
+            else if(query_for_condition.startsWith("drop table") || query_for_condition.startsWith("drop")){
                 Table table = new Table();
                 DropTableValidation validator = new DropTableValidation();
                 error = validator.validate(query, workfolder_in_db, table);
