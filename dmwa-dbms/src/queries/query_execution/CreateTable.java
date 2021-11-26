@@ -56,7 +56,7 @@ public class CreateTable {
         }
     }
 
-    private void setFile_path(String workspace_folder) {
+    public void setFile_path(String workspace_folder) {
         this.file_path = String.format(file_path, workspace_folder);
     }
     

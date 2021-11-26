@@ -29,8 +29,9 @@ public class DropTable {
 
                 // System.out.println("---file_content---"+file_content);
                 file_content.remove(table_name);
-
-                new CreateTable().write(file_content.toString());
+                CreateTable createTable = new CreateTable();
+                createTable.setFile_path(workspace_folder);
+                createTable.write(file_content.toString());
             }
         } catch (IOException e) {
             e.printStackTrace();
