@@ -110,8 +110,8 @@ public class Table {
         this.set_rhs_value = set_rhs_value;
     }
 
-    public String getSet_rhs_value(String set_rhs_value) {
-        return set_rhs_value;
+    public String getSet_rhs_value() {
+        return this.set_rhs_value;
     }
 
     

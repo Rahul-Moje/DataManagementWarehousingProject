@@ -115,7 +115,7 @@ public class QueryIdentifier {
                     if(isSuccess) {
                         String result = table.getValues().length()+ " row(s)";
                         System.out.println(result);
-                        new Log(user, DatabaseOperation.INSERT, selected_database, table.getTable_name(), query, result);
+                        new Log(user, DatabaseOperation.SELECT, selected_database, table.getTable_name(), query, result);
                     }  
                 }
                 
@@ -129,14 +129,26 @@ public class QueryIdentifier {
                     UpdateTable executor = new UpdateTable();
                     Boolean isSuccess = executor.execute(table, workfolder_in_db);
                     if(isSuccess) {
-                        String result = "Table is dropped from the database";
+                        String result = "Table updated successfully";
                         System.out.println(result);
-                        new Log(user, DatabaseOperation.DROP, selected_database, table.getTable_name(), query, result);
+                        new Log(user, DatabaseOperation.UPDATE, selected_database, table.getTable_name(), query, result);
                     }  
                 }
             }
             else if(query_for_condition.startsWith("delete from")){
-                
+                Table table = new Table();
+                DeleteFromTableValidation validator = new DeleteFromTableValidation();
+                error = validator.validate(query, workfolder_in_db, table);
+
+                if(!Utility.is_not_null_empty(error)){ 
+                    DeleteFromTable executor = new DeleteFromTable();
+                    Boolean isSuccess = executor.execute(table, workfolder_in_db);
+                    if(isSuccess) {
+                        String result = "Data is deleted from table successfully";
+                        System.out.println(result);
+                        new Log(user, DatabaseOperation.DELETE, selected_database, table.getTable_name(), query, result);
+                    }  
+                }
             }
             else if(query_for_condition.startsWith("drop table") || query_for_condition.startsWith("drop")){
                 Table table = new Table();

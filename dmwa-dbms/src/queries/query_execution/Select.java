@@ -52,7 +52,7 @@ public class Select {
 
     }
 
-    private boolean check_where_condition(JSONObject row, Table table) {
+    public boolean check_where_condition(JSONObject row, Table table) {
 
         try{
             String lhs_colname = table.getLhs_column();

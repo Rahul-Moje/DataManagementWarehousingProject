@@ -39,7 +39,7 @@ public class SelectValidation {
 
     }
 
-    private String populateDataFromFile(String workfolder_in_db, Table table, List<String> column_names_from_query) {
+    public String populateDataFromFile(String workfolder_in_db, Table table, List<String> column_names_from_query) {
         
         //validate the columns from query with actual ones
         for(String col_from_query: column_names_from_query){

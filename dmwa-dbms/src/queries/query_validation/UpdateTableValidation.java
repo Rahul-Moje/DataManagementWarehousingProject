@@ -36,12 +36,19 @@ public class UpdateTableValidation {
             return error;
         }
 
+
         String set_clause= query.substring(query.indexOf("set")+3, 0);
         if(query.contains("where")){
             set_clause= set_clause.substring(0, query.indexOf("where"));
         }
          
-        return validateSet(set_clause, table);
+        error= validateSet(set_clause, table);
+        if(Utility.is_not_null_empty(error)){
+            return error;
+        }
+
+        List<String> columns = new ArrayList<String>(table.getColumn_to_datatype().keySet());
+        return new SelectValidation().populateDataFromFile(workfolder_in_db, table, columns);
     }
 
     private String validateSet(String set_clause, Table table) {
@@ -66,7 +73,6 @@ public class UpdateTableValidation {
 
     private String validateTable(Table table, String workspace_folder) {
         try{
-            
             InsertValidation validator = new InsertValidation();
             return validator.checkTable(table, workspace_folder);
         }
