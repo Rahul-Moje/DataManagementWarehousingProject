@@ -23,7 +23,9 @@ public class LogWriter {
             JSONObject log_entry = new JSONObject();
             log_entry.put("timestamp", log.getTimestamp());
             log_entry.put("user", log.getUser().getUsername_plain());
-            log_entry.put("quey_type", log.getDatabase_operation());
+            log_entry.put("database", log.getDatabase());
+            log_entry.put("table_name", log.getTable_name());
+            log_entry.put("query_type", log.getDatabase_operation());
             log_entry.put("query", log.getQuery());
             log_entry.put("result", log.getResult());
 
