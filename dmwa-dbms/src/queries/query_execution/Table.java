@@ -5,6 +5,7 @@ import org.json.JSONObject;
 
 public class Table {
 
+    String database;
     String table_name;
     JSONObject column_to_datatype;
     JSONArray values;
@@ -12,6 +13,14 @@ public class Table {
     String operator;
     String lhs_column;
     String rhs_value;
+
+    public String getDatabase() {
+        return database;
+    }
+
+    public void setDatabase(String database) {
+        this.database = database;
+    }
 
     public void setTable_name(String table_name){
         this.table_name = table_name.toLowerCase();

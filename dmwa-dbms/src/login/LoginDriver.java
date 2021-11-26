@@ -44,7 +44,7 @@ public class LoginDriver {
             User user = userInput.getUser();
             new Log(user,
                     DatabaseOperation.LOGIN, 
-                    "login", 
+                    "login", "", "",
                     user.getUsername_plain() + " logged in successfully"
             );
 
