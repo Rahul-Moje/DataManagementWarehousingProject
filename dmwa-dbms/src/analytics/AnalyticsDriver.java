@@ -2,19 +2,17 @@ package analytics;
 
 import common.Utility;
 import login.User;
+import org.json.JSONArray;
 import queries.query_validation.UseDatabaseValidation;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class AnalyticsDriver {
 
     private User user;
     private UseDatabaseValidation useDatabaseValidation;
     private static String FILE_DIRECTORY = ".//workspace";
+    private String REGEX = "\".*\"";
 
     private static final String MENU = "***Welcome to Analytics**\n" +
             "1. Total number of queries executed on database\n" +
@@ -44,37 +42,46 @@ public class AnalyticsDriver {
 
     private void runAnalyticsOnDatabase(String databaseName) {
         String input = Utility.enter_in_console(MENU, System.console());
+        JSONArray jsonArray = null;
+        try {
+            jsonArray = readSystemLogs();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error occurred. Displaying menu again");
+            runAnalyticsOnDatabase(databaseName);
+        }
+
         switch (input) {
             case "1" :
-                findTotalNumberOfQueries(databaseName);
+                findTotalNumberOfQueries(databaseName, jsonArray);
                 runAnalyticsOnDatabase(databaseName);
                 break;
             case "2" :
-                findTotalNumberOfCreateQueries(databaseName);
+                findTotalNumberOfCreateQueries(databaseName, jsonArray);
                 runAnalyticsOnDatabase(databaseName);
                 break;
             case "3":
-                findTotalNumberOfSelectQueries(databaseName);
+                findTotalNumberOfSelectQueries(databaseName, jsonArray);
                 runAnalyticsOnDatabase(databaseName);
                 break;
             case "4" :
-                findTotalNumberOfUpdateQueries(databaseName);
+                findTotalNumberOfUpdateQueries(databaseName, jsonArray);
                 runAnalyticsOnDatabase(databaseName);
                 break;
             case "5" :
-                findTotalNumberOfInsertQueries(databaseName);
+                findTotalNumberOfInsertQueries(databaseName, jsonArray);
                 runAnalyticsOnDatabase(databaseName);
                 break;
             case "6" :
-                findTotalNumberOfDeleteQueries(databaseName);
+                findTotalNumberOfDeleteQueries(databaseName, jsonArray);
                 runAnalyticsOnDatabase(databaseName);
                 break;
             case "7" :
-                findTotalNumberOfDropQueries(databaseName);
+                findTotalNumberOfDropQueries(databaseName, jsonArray);
                 runAnalyticsOnDatabase(databaseName);
                 break;
             case "8" :
-                findTotalNumberOfTables(databaseName);
+                findTotalNumberOfTables(databaseName,jsonArray);
                 runAnalyticsOnDatabase(databaseName);
                 break;
             case "9" :
@@ -87,36 +94,38 @@ public class AnalyticsDriver {
         }
     }
 
-    private List<String> findDatabasesForCurrentUser() throws IOException {
-        return Files.list(Paths.get(FILE_DIRECTORY + "\\" + user.getUsername_encrypted()))
-                .filter(path -> !path.toFile().getName().equals("logs"))
-                .map(path -> path.toFile().getName())
-                .collect(Collectors.toList());
+    private JSONArray readSystemLogs() throws IOException {
+        String file_content_str = Utility.fetch_file_content(FILE_DIRECTORY + "\\" + user.getUsername_encrypted() + "\\logs\\system.logs");
+        if(Utility.is_not_null_empty(file_content_str)) {
+            JSONArray jsonArray = new JSONArray(file_content_str);
+            return jsonArray;
+        }
+        return null;
     }
 
-    private void findTotalNumberOfQueries(String databaseName) {
+    private void findTotalNumberOfQueries(String databaseName, JSONArray jsonArray) {
 
     }
 
-    private void findTotalNumberOfCreateQueries(String databaseName) {
+    private void findTotalNumberOfCreateQueries(String databaseName, JSONArray jsonArray) {
     }
 
-    private void findTotalNumberOfUpdateQueries(String databaseName) {
+    private void findTotalNumberOfUpdateQueries(String databaseName, JSONArray jsonArray) {
     }
 
-    private void findTotalNumberOfInsertQueries(String databaseName) {
+    private void findTotalNumberOfInsertQueries(String databaseName, JSONArray jsonArray) {
     }
 
-    private void findTotalNumberOfSelectQueries(String databaseName) {
+    private void findTotalNumberOfSelectQueries(String databaseName, JSONArray jsonArray) {
     }
 
-    private void findTotalNumberOfDeleteQueries(String databaseName) {
+    private void findTotalNumberOfDeleteQueries(String databaseName, JSONArray jsonArray) {
     }
 
-    private void findTotalNumberOfDropQueries(String databaseName) {
+    private void findTotalNumberOfDropQueries(String databaseName, JSONArray jsonArray) {
     }
 
-    private void findTotalNumberOfTables(String databaseName) {
+    private void findTotalNumberOfTables(String databaseName, JSONArray jsonArray) {
     }
 
 
