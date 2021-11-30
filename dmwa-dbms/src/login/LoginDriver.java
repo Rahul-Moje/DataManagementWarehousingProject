@@ -44,7 +44,7 @@ public class LoginDriver {
             User user = userInput.getUser();
             new Log(user,
                     DatabaseOperation.LOGIN, 
-                    "login", 
+                    "login", "", "",
                     user.getUsername_plain() + " logged in successfully"
             );
 
@@ -69,7 +69,7 @@ public class LoginDriver {
             DataModelDriver.run();
         }
         else if(dbms_option.equals("4")){
-            AnalyticsDriver.run();
+            new AnalyticsDriver(userInput.getUser()).run();
         }
 
         successful_login();

@@ -40,7 +40,7 @@ public class QueryIdentifier {
                 if(isSuccess){
                     String result = "Database created successfully";
                     System.out.println(result);
-                    new Log(user, DatabaseOperation.CREATE_DATABASE, query, result);
+                    new Log(user, DatabaseOperation.CREATE_DATABASE, "", "", query, result);
                 }
             }
         }
@@ -59,7 +59,7 @@ public class QueryIdentifier {
                 selected_database = tokens[tokens.length-1];
                 String result = "Using database "+selected_database;
                 System.out.println(result);
-                new Log(user, DatabaseOperation.USE_DATABASE, query, result);
+                new Log(user, DatabaseOperation.USE_DATABASE, selected_database, "", query, result);
             }
         }
         else {
@@ -83,7 +83,7 @@ public class QueryIdentifier {
                     if(isSuccess){
                         String result = "Table created successfully";
                         System.out.println(result);
-                        new Log(user, DatabaseOperation.CREATE_TABLE, query, result);
+                        new Log(user, DatabaseOperation.CREATE_TABLE, selected_database, table.getTable_name(), query, result);
                     }  
                 }
             }
@@ -99,7 +99,7 @@ public class QueryIdentifier {
                     if(isSuccess){
                         String result = table.getValues().length()+ " row(s) inserted successfully";
                         System.out.println(result);
-                        new Log(user, DatabaseOperation.INSERT, query, result);
+                        new Log(user, DatabaseOperation.INSERT, selected_database, table.getTable_name(), query, result);
                     }  
                 }
             }
@@ -115,7 +115,7 @@ public class QueryIdentifier {
                     if(isSuccess) {
                         String result = table.getValues().length()+ " row(s)";
                         System.out.println(result);
-                        new Log(user, DatabaseOperation.INSERT, query, result);
+                        new Log(user, DatabaseOperation.INSERT, selected_database, table.getTable_name(), query, result);
                     }  
                 }
                 
