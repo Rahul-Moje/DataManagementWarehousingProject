@@ -1,11 +1,17 @@
 package analytics;
 
+import common.DatabaseOperation;
 import common.Utility;
 import login.User;
 import org.json.JSONArray;
+import org.json.JSONObject;
 import queries.query_validation.UseDatabaseValidation;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class AnalyticsDriver {
 
@@ -97,35 +103,161 @@ public class AnalyticsDriver {
     private JSONArray readSystemLogs() throws IOException {
         String file_content_str = Utility.fetch_file_content(FILE_DIRECTORY + "\\" + user.getUsername_encrypted() + "\\logs\\system.logs");
         if(Utility.is_not_null_empty(file_content_str)) {
-            JSONArray jsonArray = new JSONArray(file_content_str);
-            return jsonArray;
+            return new JSONArray(file_content_str);
         }
         return null;
     }
 
     private void findTotalNumberOfQueries(String databaseName, JSONArray jsonArray) {
+        int count = 0;
+        for(int i=0;i<jsonArray.length();i++) {
+            JSONObject jsonObject = jsonArray.getJSONObject(i);
+            if(isLogRelatedToDatabase(jsonObject, databaseName)) {
+                count++;
+            }
+        }
+        System.out.println("Total number of queries executed by " + user.getUsername_plain() + " is " + count);
+    }
 
+    private boolean isLogRelatedToDatabase(JSONObject jsonObject, String databaseName) {
+        if(jsonObject.getString("database").equals(databaseName)
+                && jsonObject.getString("user").equalsIgnoreCase(user.getUsername_plain())
+                && !jsonObject.getString("query_type").equals(DatabaseOperation.LOGIN.name())
+                && !jsonObject.getString("query_type").equals(DatabaseOperation.USE_DATABASE.name())) {
+            return true;
+        }
+        if(jsonObject.getString("query_type").equals(DatabaseOperation.CREATE_DATABASE.name())
+                && jsonObject.getString("query").split(" ")[2].equals(databaseName)
+                && jsonObject.getString("result").contains("success")) {
+            return true;
+        }
+        return false;
     }
 
     private void findTotalNumberOfCreateQueries(String databaseName, JSONArray jsonArray) {
+        Map<String, Integer> countMap = new HashMap<>();
+        for(int i=0;i<jsonArray.length();i++) {
+            JSONObject jsonObject = jsonArray.getJSONObject(i);
+            if(isLogRelatedToDatabase(jsonObject, databaseName) && isQueryOfType(jsonObject, DatabaseOperation.CREATE_TABLE)) {
+                String tableName = jsonObject.getString("table_name");
+                if(countMap.containsKey(tableName)) {
+                    countMap.put(tableName, countMap.get(tableName)+1);
+                } else {
+                    countMap.put(tableName, 1);
+                }
+            }
+        }
+        displayQueryStats(countMap, DatabaseOperation.CREATE_TABLE);
+    }
+
+    private void displayQueryStats(Map<String, Integer> countMap, DatabaseOperation operation) {
+        if(countMap.size() == 0) {
+            System.out.println("No " + operation.name() + " queries were executed by " + user.getUsername_plain());
+            return;
+        }
+        for(Map.Entry<String, Integer> entry : countMap.entrySet()) {
+            System.out.println("Total number of " + operation.name() + " queries executed by " + user.getUsername_plain()
+                    + " on table " + entry.getKey() + " is " + entry.getValue());
+        }
+    }
+
+    private boolean isQueryOfType(JSONObject jsonObject, DatabaseOperation operation) {
+        return jsonObject.getString("query_type").equals(operation.name());
     }
 
     private void findTotalNumberOfUpdateQueries(String databaseName, JSONArray jsonArray) {
+        Map<String, Integer> countMap = new HashMap<>();
+        for(int i=0;i<jsonArray.length();i++) {
+            JSONObject jsonObject = jsonArray.getJSONObject(i);
+            if(isLogRelatedToDatabase(jsonObject, databaseName) && isQueryOfType(jsonObject, DatabaseOperation.UPDATE)) {
+                String tableName = jsonObject.getString("table_name");
+                if(countMap.containsKey(tableName)) {
+                    countMap.put(tableName, countMap.get(tableName)+1);
+                } else {
+                    countMap.put(tableName, 1);
+                }
+            }
+        }
+        displayQueryStats(countMap, DatabaseOperation.UPDATE);
     }
 
     private void findTotalNumberOfInsertQueries(String databaseName, JSONArray jsonArray) {
+        Map<String, Integer> countMap = new HashMap<>();
+        for(int i=0;i<jsonArray.length();i++) {
+            JSONObject jsonObject = jsonArray.getJSONObject(i);
+            if(isLogRelatedToDatabase(jsonObject, databaseName) && isQueryOfType(jsonObject, DatabaseOperation.INSERT)) {
+                String tableName = jsonObject.getString("table_name");
+                if(countMap.containsKey(tableName)) {
+                    countMap.put(tableName, countMap.get(tableName)+1);
+                } else {
+                    countMap.put(tableName, 1);
+                }
+            }
+        }
+        displayQueryStats(countMap, DatabaseOperation.INSERT);
     }
 
     private void findTotalNumberOfSelectQueries(String databaseName, JSONArray jsonArray) {
+        Map<String, Integer> countMap = new HashMap<>();
+        for(int i=0;i<jsonArray.length();i++) {
+            JSONObject jsonObject = jsonArray.getJSONObject(i);
+            if(isLogRelatedToDatabase(jsonObject, databaseName) && isQueryOfType(jsonObject, DatabaseOperation.SELECT)) {
+                String tableName = jsonObject.getString("table_name");
+                if(countMap.containsKey(tableName)) {
+                    countMap.put(tableName, countMap.get(tableName)+1);
+                } else {
+                    countMap.put(tableName, 1);
+                }
+            }
+        }
+        displayQueryStats(countMap, DatabaseOperation.SELECT);
     }
 
     private void findTotalNumberOfDeleteQueries(String databaseName, JSONArray jsonArray) {
+        Map<String, Integer> countMap = new HashMap<>();
+        for(int i=0;i<jsonArray.length();i++) {
+            JSONObject jsonObject = jsonArray.getJSONObject(i);
+            if(isLogRelatedToDatabase(jsonObject, databaseName) && isQueryOfType(jsonObject, DatabaseOperation.DELETE)) {
+                String tableName = jsonObject.getString("table_name");
+                if(countMap.containsKey(tableName)) {
+                    countMap.put(tableName, countMap.get(tableName)+1);
+                } else {
+                    countMap.put(tableName, 1);
+                }
+            }
+        }
+        displayQueryStats(countMap, DatabaseOperation.DELETE);
     }
 
     private void findTotalNumberOfDropQueries(String databaseName, JSONArray jsonArray) {
+        Map<String, Integer> countMap = new HashMap<>();
+        for(int i=0;i<jsonArray.length();i++) {
+            JSONObject jsonObject = jsonArray.getJSONObject(i);
+            if(isLogRelatedToDatabase(jsonObject, databaseName) && isQueryOfType(jsonObject, DatabaseOperation.DROP)) {
+                String tableName = jsonObject.getString("table_name");
+                if(countMap.containsKey(tableName)) {
+                    countMap.put(tableName, countMap.get(tableName)+1);
+                } else {
+                    countMap.put(tableName, 1);
+                }
+            }
+        }
+        displayQueryStats(countMap, DatabaseOperation.DROP);
     }
 
     private void findTotalNumberOfTables(String databaseName, JSONArray jsonArray) {
+        Set<String> tableNames = new HashSet<>();
+        for(int i=0;i<jsonArray.length();i++) {
+            JSONObject jsonObject = jsonArray.getJSONObject(i);
+            if(isLogRelatedToDatabase(jsonObject, databaseName)) {
+                String tableName = jsonObject.getString("table_name");
+                if(null != tableName && !"".equals(tableName)) {
+                    tableNames.add(tableName);
+                }
+            }
+            System.out.println("Total number of tables in database " + databaseName + " is " + tableNames.size());
+            System.out.println("Tables are " + tableNames);
+        }
     }
 
 
