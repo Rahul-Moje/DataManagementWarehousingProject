@@ -75,7 +75,6 @@ public class FilterValidation {
     public String validateWhereClause(String query, Table table){
         
         String where_clause = query.toLowerCase().contains("where") ? query.substring(query.indexOf("where")+5).trim() : "";
-        System.out.println("**** where_clause **** "+where_clause);
         if(!Utility.is_not_null_empty(where_clause)){
             return null;
         }
@@ -96,6 +95,11 @@ public class FilterValidation {
         
         if(table.getColumn_to_datatype().containsKey(lhs_colname)){
             String data_type = table.getColumn_to_datatype().get(lhs_colname);
+            if(data_type.equalsIgnoreCase("nvarchar")){
+                if(rhs_value.startsWith("\"") || rhs_value.startsWith("\'")){
+                    rhs_value = (String) rhs_value.subSequence(1, rhs_value.length()-1);
+                }
+            }
             if(!datatype_to_operators.get(data_type).contains(table.getOperator())){
                 return String.format("Invalid operator for %s datatype. Valid operators are %s", 
                         data_type, String.join(",", datatype_to_operators.get(data_type)) );

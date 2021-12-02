@@ -2,31 +2,29 @@ package queries.query_validation;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import common.Utility;
 import queries.query_execution.Table;
 
 public class UpdateTableValidation {
 
+    QueryValidationUtility util;
+
+    public UpdateTableValidation(){
+        util = new QueryValidationUtility();
+    }
+
     public String validate(String query, String workfolder_in_db, Table table) {
 
-        if(query.endsWith(";")){
-            query = query.substring(0, query.length()-1);
-        }
+        query = util.removeLastSemiColon(query);
 
-        List<String> tokens = new ArrayList<String>();
-        StringTokenizer tokenizer = new StringTokenizer(query.toLowerCase().substring(0, query.indexOf("set")), " ");
-        while(tokenizer.hasMoreTokens()){
-            tokens.add(tokenizer.nextToken().trim());
-        }
+        List<String> tokens = util.queryTokens(query.toLowerCase().substring(0, query.indexOf("set")));
         if(tokens.size() != 2) {
             return "Syntax error";
         }
         table.setTable_name(tokens.get(1)) ;
 
-        String error = validateTable(table, workfolder_in_db);
-        // System.out.println("----table------1: "+table.toString());
+        String error = util.check_table_exists(table, workfolder_in_db);
         if(Utility.is_not_null_empty(error)){
             return error;
         }
@@ -38,20 +36,16 @@ public class UpdateTableValidation {
 
 
         String set_clause= query.substring(query.indexOf("set")+3);
-        System.out.println("---set_clause--- "+set_clause);
         if(query.contains("where")){
-            System.out.println(query.indexOf("where"));
             set_clause= set_clause.substring(0, set_clause.indexOf("where"));
-            System.out.println("---set_clause--- "+set_clause);
         }
-         
         error= validateSet(set_clause, table);
         if(Utility.is_not_null_empty(error)){
             return error;
         }
 
         List<String> columns = new ArrayList<String>(table.getColumn_to_datatype().keySet());
-        return new SelectValidation().populateDataFromFile(workfolder_in_db, table, columns);
+        return util.populateDataFromFile(workfolder_in_db, table, columns);
     }
 
     private String validateSet(String set_clause, Table table) {
@@ -72,18 +66,6 @@ public class UpdateTableValidation {
         }
 
         return null;
-    }
-
-    private String validateTable(Table table, String workspace_folder) {
-        try{
-            InsertValidation validator = new InsertValidation();
-            return validator.checkTable(table, workspace_folder);
-        }
-        catch(Exception e){
-            e.printStackTrace();
-            return "Syntax error";
-        }
-        
     }
     
 }

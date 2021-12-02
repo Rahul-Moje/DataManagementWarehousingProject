@@ -39,9 +39,7 @@ public class DropTable {
                     count++;      
                 }
 
-                CreateTable createTable = new CreateTable();
-                createTable.setFile_path(workspace_folder);
-                createTable.write(final_file_content);
+                Utility.write(path, final_file_content);
             }
         } catch (IOException e) {
             e.printStackTrace();

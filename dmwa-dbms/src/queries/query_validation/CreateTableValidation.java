@@ -3,33 +3,28 @@ package queries.query_validation;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import common.RetrieveTableInfo;
-import common.Utility;
 import queries.query_execution.Table;
-import queries.query_execution.TableMetaData;
 
 public class CreateTableValidation {
 
     final List<String> valid_data_type = new ArrayList<String>(
                                         Arrays.asList("nvarchar", "integer", "float", "date"));
+    
+    QueryValidationUtility util;
+
+    public CreateTableValidation(){
+        util = new QueryValidationUtility();
+    }
 
     public String validate(String query, String workspace_folder, Table table) {
 
-        if(query.endsWith(";")){
-            query = query.substring(0, query.length()-1);
-        }
+        query = util.removeLastSemiColon(query);
 
         String substring_before_bracket = query.split("\\(")[0].trim();
-
-        List<String> tokens = new ArrayList<String>();
-        StringTokenizer tokenizer = new StringTokenizer(substring_before_bracket, " ");
-        while(tokenizer.hasMoreTokens()){
-            tokens.add(tokenizer.nextToken());
-        }
+        List<String> tokens = util.queryTokens(substring_before_bracket);
         if(tokens.size() != 3) {
             return "Syntax error";
         }
@@ -42,31 +37,14 @@ public class CreateTableValidation {
 
         //check for duplicate table name
         table.setTable_name(tokens.get(2)) ;
-        // String path = ".//workspace//"+workspace_folder+"//"+table.getTable_name()+".tsv";
-        String error = isDupicateTable(table.getTable_name(), workspace_folder);
-        if(Utility.is_not_null_empty(error)){
-            return error;
+        String message = util.check_table_exists(table, workspace_folder);
+        if(message == null){
+            return "Table already exists in database";
         }
-
-        //validate where_clause
-        
 
         //validate the values part
         return validate_values(query, table);
 
-    }
-
-
-    private String isDupicateTable(String table_name, String workspace_folder) {
-        List<TableMetaData> tables_info = RetrieveTableInfo.getTables(workspace_folder);
-        if(tables_info.size()>0){
-            for(TableMetaData table_info: tables_info){
-                if(table_info.getTable_name().equalsIgnoreCase(table_name)){
-                    return "table already exists in database";
-                }
-            }
-        }
-        return null;
     }
 
 

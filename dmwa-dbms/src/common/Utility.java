@@ -3,6 +3,7 @@ package common;
 import java.io.Console;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.TimeUnit;
@@ -74,6 +75,14 @@ public class Utility {
             return info;
         }
         return null;
+    }
+
+    public static void write(String file_path, String content) throws IOException{
+        FileWriter fileWriter = new FileWriter(file_path, false);
+        fileWriter.write(content);
+        fileWriter.flush();
+        fileWriter.close();
+
     }
     
 }

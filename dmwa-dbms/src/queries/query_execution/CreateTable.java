@@ -1,7 +1,6 @@
 package queries.query_execution;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 
 import common.Constants;
@@ -11,6 +10,7 @@ public class CreateTable {
 
     String file_path = ".//workspace//%s//metadata//table_info"+Constants.DATA_FILE_EXTENSION;
     final String header = String.format("table_name%scolumns%sdata_types", Constants.DELIMITER, Constants.DELIMITER);
+    
 
     public boolean execute(Table table, String workspace_folder) {
 
@@ -37,25 +37,15 @@ public class CreateTable {
                                     +String.join(";", table.getColumn_to_datatype().keySet())+Constants.DELIMITER
                                     +String.join(";", table.getColumn_to_datatype().values());
             file_content_str+=string_to_append;
-            write(file_content_str);
+            Utility.write(file_path, file_content_str);
         }
-        
-        
-    }
-
-    public void write(String content) throws IOException{
-        FileWriter fileWriter = new FileWriter(file_path, false);
-        fileWriter.write(content);
-        fileWriter.flush();
-        fileWriter.close();
-
     }
 
     private void create_empty_file_if_not_exists() throws IOException {
         File file = new File(file_path);
         if(!file.exists()) {
             file.getParentFile().mkdirs();
-            write(header);
+            Utility.write(file_path, header);
         }
     }
 
