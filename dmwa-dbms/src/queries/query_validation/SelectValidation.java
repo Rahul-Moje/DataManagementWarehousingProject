@@ -3,10 +3,8 @@ package queries.query_validation;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import common.Constants;
 import common.Utility;
@@ -43,7 +41,7 @@ public class SelectValidation {
         
         //validate the columns from query with actual ones
         for(String col_from_query: column_names_from_query){
-            if(!table.getColumn_to_datatype().has(col_from_query)) {
+            if(!table.getColumn_to_datatype().containsKey(col_from_query)) {
                 return "Incorrect columns name: " + col_from_query;
             }
         }
@@ -59,13 +57,13 @@ public class SelectValidation {
         }
         try{
             if(Utility.is_not_null_empty(content)){
-                JSONArray values = new JSONArray();
+                List<HashMap<String,String>> values = new ArrayList<>();
                 List<String> columns = new ArrayList<String>();
                 int count = 0;
                 String[] rows = content.split(Constants.LINE_SEPARATOR);
                 for(String row: rows){
                     String[] cell_data = row.split(Constants.DELIMITER);
-                    JSONObject row_json = new JSONObject();
+                    HashMap<String,String> row_map = new HashMap<>();
                     for(int i = 0; i<cell_data.length; ++i){
                         String val = cell_data[i].trim();
                         
@@ -77,12 +75,12 @@ public class SelectValidation {
                             String col_name = columns.get(i);
                             if(column_names_from_query.contains(col_name)){
                                 //add logic for whereclause
-                                row_json.put(col_name, val);
+                                row_map.put(col_name, val);
                             }
                         }
                     }
                     if(count > 0){
-                        values.put(row_json);
+                        values.add(row_map);
                     }
                     count++;
                         

@@ -94,8 +94,8 @@ public class FilterValidation {
         String rhs_value = where_clause.split(table.getOperator())[1].trim();
 
         
-        if(table.getColumn_to_datatype().has(lhs_colname)){
-            String data_type = table.getColumn_to_datatype().getString(lhs_colname);
+        if(table.getColumn_to_datatype().containsKey(lhs_colname)){
+            String data_type = table.getColumn_to_datatype().get(lhs_colname);
             if(!datatype_to_operators.get(data_type).contains(table.getOperator())){
                 return String.format("Invalid operator for %s datatype. Valid operators are %s", 
                         data_type, String.join(",", datatype_to_operators.get(data_type)) );

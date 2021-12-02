@@ -1,17 +1,16 @@
 package queries.query_validation;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
+import common.RetrieveTableInfo;
 import common.Utility;
 import queries.query_execution.Table;
+import queries.query_execution.TableMetaData;
 
 public class InsertValidation {
     
@@ -56,11 +55,11 @@ public class InsertValidation {
         try{
             Pattern pattern = Pattern.compile("\\(.*?\\)");
             Matcher m = pattern.matcher(query);
-            JSONArray rows = new JSONArray();
+            List<HashMap<String,String>> rows = new ArrayList<>();
             List<String> columns = new ArrayList<String>();
             int count = 0;
             while (m.find()) {
-                JSONObject row = new JSONObject();
+                HashMap<String,String> row = new HashMap<>();
                 String str = m.group();
                 String str_between_brackets = (String) str.subSequence(1, str.length()-1);
                 String[] elements = str_between_brackets.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
@@ -78,7 +77,7 @@ public class InsertValidation {
                     }
                 }
                 if(count > 0){
-                    rows.put(row);
+                    rows.add(row);
                 }
                 count++;
             }
@@ -93,27 +92,22 @@ public class InsertValidation {
     }
 
     public String checkTable(Table table, String workspace_folder) {
-        String path = ".//workspace//"+workspace_folder+"//metadata//table_info.txt";
         String table_name = table.getTable_name();
-        try {
-            String file_content_str = Utility.fetch_file_content(path);
-            if(Utility.is_not_null_empty(file_content_str)){
-                JSONObject file_content = new JSONObject(file_content_str);
+        List<TableMetaData> tables_info = RetrieveTableInfo.getTables(workspace_folder);
+        System.out.println("---tables_info--- "+tables_info);
+        Boolean isTablePresent = false;
+        for(TableMetaData table_info : tables_info){
 
-                // System.out.println("---file_content---"+file_content);
-
-                if(!file_content.keySet().contains(table_name)){
-                    return "Table not found.";
-                }
-                else{
-                    JSONObject col_datatype = file_content.getJSONObject(table_name);
-                    // System.out.println("---col_datatype---"+col_datatype);
-                    table.setColumn_to_datatype(col_datatype);
-                }
+            System.out.println("---ttable_info.getTable_name()---"+table_info.getTable_name()+"---");
+            System.out.println("---table_name---"+table_name+"---");
+            if(table_info.getTable_name().equalsIgnoreCase(table_name)){
+                isTablePresent=true;
+                table.setColumn_to_datatype(table_info.getCol_datatype());
+                break;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "System error.";
+        }
+        if(isTablePresent == false){
+            return "Table not found";
         }
         return null;
     }

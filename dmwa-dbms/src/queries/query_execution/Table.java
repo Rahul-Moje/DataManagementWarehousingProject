@@ -1,14 +1,18 @@
 package queries.query_execution;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+
 
 public class Table {
 
     String database;
     String table_name;
-    JSONObject column_to_datatype;
-    JSONArray values;
+    HashMap<String,String> column_to_datatype;
+    // JSONObject column_to_datatype;
+    List<HashMap<String,String>> values;
+    // JSONArray values;
     String where_clause;
     String operator;
     String lhs_column;
@@ -56,26 +60,26 @@ public class Table {
         return this.table_name;
     }
 
-    public void setColumn_to_datatype(JSONObject column_to_datatype){
+    public void setColumn_to_datatype(HashMap<String,String> column_to_datatype){
         this.column_to_datatype = column_to_datatype;
     }
 
-    public JSONObject getColumn_to_datatype(){
+    public HashMap<String,String> getColumn_to_datatype(){
         return this.column_to_datatype;
     }
 
     public void add_to_column_to_datatype(String key, String value){
         if(this.column_to_datatype == null){
-            this.column_to_datatype = new JSONObject();
+            this.column_to_datatype = new LinkedHashMap<>();
         }
         this.column_to_datatype.put(key.toLowerCase(), value);
     }
 
-    public void setValues(JSONArray values){
+    public void setValues(List<HashMap<String,String>> values){
         this.values = values;
     }
 
-    public JSONArray getValues(){
+    public List<HashMap<String,String>> getValues(){
         return this.values;
     }
 

@@ -97,7 +97,7 @@ public class QueryIdentifier {
                     Insert executor = new Insert();
                     Boolean isSuccess = executor.execute(table, workfolder_in_db);
                     if(isSuccess){
-                        String result = table.getValues().length()+ " row(s) inserted successfully";
+                        String result = table.getValues().size()+ " row(s) inserted successfully";
                         System.out.println(result);
                         new Log(user, DatabaseOperation.INSERT, selected_database, table.getTable_name(), query, result);
                     }  
@@ -113,7 +113,8 @@ public class QueryIdentifier {
                     Select executor = new Select();
                     Boolean isSuccess = executor.execute(table);
                     if(isSuccess) {
-                        String result = table.getValues().length()+ " row(s)";
+                        System.out.println("----table.getValues() ---- "+table.getValues());
+                        String result = table.getValues().size()+ " row(s)";
                         System.out.println(result);
                         new Log(user, DatabaseOperation.SELECT, selected_database, table.getTable_name(), query, result);
                     }  
@@ -164,6 +165,9 @@ public class QueryIdentifier {
                         new Log(user, DatabaseOperation.DROP, selected_database, table.getTable_name(), query, result);
                     }  
                 }
+            }
+            else{
+                error = "Incorrect syntax. Please refer query guide.";
             }
         }
         

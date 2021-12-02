@@ -4,13 +4,13 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import org.json.JSONObject;
-
+import common.Constants;
 import common.Utility;
 
 public class CreateTable {
 
-    String file_path = ".//workspace//%s//metadata//table_info.txt";
+    String file_path = ".//workspace//%s//metadata//table_info"+Constants.DATA_FILE_EXTENSION;
+    final String header = String.format("table_name%scolumns%sdata_types", Constants.DELIMITER, Constants.DELIMITER);
 
     public boolean execute(Table table, String workspace_folder) {
 
@@ -32,9 +32,12 @@ public class CreateTable {
 
         String file_content_str = Utility.fetch_file_content(file_path);
         if(Utility.is_not_null_empty(file_content_str)){
-            JSONObject file_content = new JSONObject(file_content_str);
-            file_content.put(table.getTable_name(), table.getColumn_to_datatype());
-            write(file_content.toString());
+            String string_to_append = Constants.LINE_SEPARATOR+
+                                    table.getTable_name()+Constants.DELIMITER
+                                    +String.join(";", table.getColumn_to_datatype().keySet())+Constants.DELIMITER
+                                    +String.join(";", table.getColumn_to_datatype().values());
+            file_content_str+=string_to_append;
+            write(file_content_str);
         }
         
         
@@ -52,7 +55,7 @@ public class CreateTable {
         File file = new File(file_path);
         if(!file.exists()) {
             file.getParentFile().mkdirs();
-            write(new JSONObject().toString());
+            write(header);
         }
     }
 

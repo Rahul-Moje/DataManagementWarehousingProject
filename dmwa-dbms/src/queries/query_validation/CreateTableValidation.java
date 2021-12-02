@@ -1,6 +1,5 @@
 package queries.query_validation;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -8,10 +7,10 @@ import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.json.JSONObject;
-
+import common.RetrieveTableInfo;
 import common.Utility;
 import queries.query_execution.Table;
+import queries.query_execution.TableMetaData;
 
 public class CreateTableValidation {
 
@@ -59,18 +58,13 @@ public class CreateTableValidation {
 
 
     private String isDupicateTable(String table_name, String workspace_folder) {
-        String path = ".//workspace//"+workspace_folder+"//metadata//table_info.txt";
-        try {
-            String file_content_str = Utility.fetch_file_content(path);
-            if(Utility.is_not_null_empty(file_content_str)){
-                JSONObject file_content = new JSONObject(file_content_str);
-                if(file_content.keySet().contains(table_name.toLowerCase())){
-                    return "Table already exists in database";
+        List<TableMetaData> tables_info = RetrieveTableInfo.getTables(workspace_folder);
+        if(tables_info.size()>0){
+            for(TableMetaData table_info: tables_info){
+                if(table_info.getTable_name().equalsIgnoreCase(table_name)){
+                    return "table already exists in database";
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "System error";
         }
         return null;
     }

@@ -37,9 +37,12 @@ public class UpdateTableValidation {
         }
 
 
-        String set_clause= query.substring(query.indexOf("set")+3, 0);
+        String set_clause= query.substring(query.indexOf("set")+3);
+        System.out.println("---set_clause--- "+set_clause);
         if(query.contains("where")){
-            set_clause= set_clause.substring(0, query.indexOf("where"));
+            System.out.println(query.indexOf("where"));
+            set_clause= set_clause.substring(0, set_clause.indexOf("where"));
+            System.out.println("---set_clause--- "+set_clause);
         }
          
         error= validateSet(set_clause, table);
@@ -59,8 +62,8 @@ public class UpdateTableValidation {
         
         String lhs_colname = set_clause.split("=")[0].trim();
         String rhs_value = set_clause.split("=")[1].trim();
-
-        if(table.getColumn_to_datatype().has(lhs_colname)){
+        System.out.println("----lhs_colname--- "+lhs_colname);
+        if(table.getColumn_to_datatype().containsKey(lhs_colname)){
             table.setSet_lhs_column(lhs_colname);
             table.setSet_rhs_value(rhs_value);
         }
