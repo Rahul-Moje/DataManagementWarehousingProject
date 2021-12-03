@@ -19,8 +19,11 @@ public class UseDatabaseValidation {
             return "Syntax error. Query has more than 3 tokens.";
         }
         else{
-            return util.check_db_exists(tokens.get(2), workspace_folder);
+            if(util.check_db_exists(tokens.get(2), workspace_folder) == null) {
+                return "Database does not exist";
+            }
         }
+        return null;
     }
     
 }

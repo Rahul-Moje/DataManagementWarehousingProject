@@ -78,6 +78,7 @@ public class Utility {
     }
 
     public static void write(String file_path, String content) throws IOException{
+        content = content.trim();
         FileWriter fileWriter = new FileWriter(file_path, false);
         fileWriter.write(content);
         fileWriter.flush();

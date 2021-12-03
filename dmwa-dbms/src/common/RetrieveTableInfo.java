@@ -9,12 +9,6 @@ import queries.query_execution.TableMetaData;
 
 public class RetrieveTableInfo {
 
-    // List<Table> tables;
-
-    // public RetrieveTableInfo(){
-    //     tables = new ArrayList<>();
-    // }
-
     public static List<TableMetaData> getTables(String workspace_folder){
         List<TableMetaData> tables = new ArrayList<>();
 

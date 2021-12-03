@@ -113,7 +113,6 @@ public class QueryIdentifier {
                     Select executor = new Select();
                     Boolean isSuccess = executor.execute(table);
                     if(isSuccess) {
-                        System.out.println("----table.getValues() ---- "+table.getValues());
                         String result = table.getValues().size()+ " row(s)";
                         System.out.println(result);
                         new Log(user, DatabaseOperation.SELECT, selected_database, table.getTable_name(), query, result);
