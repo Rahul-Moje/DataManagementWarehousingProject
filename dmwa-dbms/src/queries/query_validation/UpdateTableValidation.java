@@ -56,7 +56,7 @@ public class UpdateTableValidation {
         
         String lhs_colname = set_clause.split("=")[0].trim();
         String rhs_value = set_clause.split("=")[1].trim();
-        System.out.println("----lhs_colname--- "+lhs_colname);
+        // System.out.println("----lhs_colname--- "+lhs_colname);
         if(table.getColumn_to_datatype().containsKey(lhs_colname)){
             table.setSet_lhs_column(lhs_colname);
             table.setSet_rhs_value(rhs_value);

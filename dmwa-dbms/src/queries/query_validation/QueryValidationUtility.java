@@ -2,7 +2,9 @@ package queries.query_validation;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -46,8 +48,13 @@ public class QueryValidationUtility {
         Boolean isTablePresent = false;
         for(TableMetaData table_info : tables_info){
             if(table_info.getTable_name().equalsIgnoreCase(table_name)){
+                // System.out.println("---table_info--- "+table_info.toString());
                 isTablePresent=true;
                 table.setColumn_to_datatype(table_info.getCol_datatype());
+                table.setPrimary_keys(table_info.getPrimary_keys());
+                table.setUnique_columns(table_info.getUnique_columns());
+                table.setNot_null_columns(table_info.getNot_null_columns());
+                table.setColumn_to_referencetable_to_column(table_info.getColumn_to_referencetable_to_column());
                 break;
             }
         }
@@ -94,7 +101,6 @@ public class QueryValidationUtility {
                         else {
                             String col_name = columns.get(i);
                             if(column_names_from_query.contains(col_name)){
-                                //add logic for whereclause
                                 row_map.put(col_name, val);
                             }
                         }
@@ -112,6 +118,141 @@ public class QueryValidationUtility {
             e.printStackTrace();
             return "System error";
         }
+        
+        return null;
+    }
+
+    public String validate_foreign_key_constraint(Table table, String workspace_folder){
+
+        HashMap<String,HashMap<String,String>> column_to_referencetable_to_column = table.getColumn_to_referencetable_to_column();
+
+        HashMap<String,TableMetaData> table_to_tableinfo= RetrieveTableInfo.getMapOfTableNameToInfo(workspace_folder);
+        // System.out.println("---column_to_referencetable_to_column-- "+column_to_referencetable_to_column);
+        if(column_to_referencetable_to_column!=null && column_to_referencetable_to_column.size()>0){
+
+            for(String fk: column_to_referencetable_to_column.keySet()){
+                String datatype = table.getColumn_to_datatype().get(fk);
+                // System.out.println("---fk-- "+fk);
+                HashMap<String,String> table_col = column_to_referencetable_to_column.get(fk);
+                // System.out.println("---table_col-- "+table_col);
+                for(String referenced_table: table_col.keySet()){
+
+                    String referenced_column = table_col.get(referenced_table);
+                    Table table_for_query = new Table();
+                    TableMetaData tmd = table_to_tableinfo.get(referenced_table);
+                    // System.out.println("---tmd-- "+tmd.toString());
+                    table_for_query.setTable_name(tmd.getTable_name());
+                    table_for_query.setColumn_to_datatype(tmd.getCol_datatype());
+
+                    populateDataFromFile(workspace_folder, table_for_query, Arrays.asList(referenced_column) );
+                    // System.out.println("---table2 values-- "+table.getValues().toString());
+                    for(HashMap<String,String> row: table.getValues()){
+                        String value1 = row.get(fk);
+
+                        // System.out.println("---value1 values-- "+value1);
+                        int count = 0;
+                        for(HashMap<String,String> inner_row: table_for_query.getValues()){
+                            String value2 = inner_row.get(referenced_column);
+                            // System.out.println("---value2 values-- "+value2);
+                            switch(datatype){
+                                case "nvarchar":
+
+                                    // System.out.println("---nvarchar nvarchar-- ");
+                                    if(value1.equalsIgnoreCase(value2)){
+                                        ++count;
+                                    }
+                                    break;
+                                case "integer":
+                                    // System.out.println("---integer integer-- ");
+                                    if(Integer.valueOf(value1)==Integer.valueOf(value2)){
+                                        ++count;
+                                    }
+                                    break;
+                                case "float":
+                                    // System.out.println("---float float-- ");
+                                    if(Float.valueOf(value1)==Float.valueOf(value2)){
+                                        ++count;
+                                    }
+                                    break;
+                                case "date":
+                                    // System.out.println("---date date-- ");
+                                    if(Date.valueOf(value1)==Date.valueOf(value2)){
+                                        ++count;
+                                    }
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        // System.out.println("---count count-- ");
+                        if(count == 0){
+                            return "Referenced table does not contain the foriegn key";
+                        }
+                    }
+
+                }
+            }
+        }
+        return null;
+    }
+
+    public String validate_primary_key_constraint(Table table, String workspace_folder) {
+        
+        Table table_clone = new Table();
+        table_clone.setTable_name(table.getTable_name());
+        table_clone.setColumn_to_datatype(table.getColumn_to_datatype());
+        
+        populateDataFromFile(workspace_folder, table_clone, table.getPrimary_keys());
+
+        if(table_clone.getValues().size()>0){
+            List<String> pk_vals = new ArrayList<>();
+            List<String> u_vals = new ArrayList<>();
+
+            for(HashMap<String,String> existing_table_row: table_clone.getValues()){
+
+                if(table.getPrimary_keys().size()>0){
+                    String pk_val="";
+                    for(String pk : table.getPrimary_keys()){
+                        pk_val+=existing_table_row.get(pk);    
+                    }
+                    pk_vals.add(pk_val);
+                }
+
+                if(table.getUnique_columns().size()>0){
+                    String u_val="";
+                    for(String uk : table.getUnique_columns()){
+                        u_val+=existing_table_row.get(uk);    
+                    }
+                    u_vals.add(u_val);
+                }
+                
+            }
+
+            for(HashMap<String,String> new_table_row: table.getValues()){
+                if(table.getPrimary_keys().size()>0){
+                    String pk_val="";
+                    for(String pk : table.getPrimary_keys()){
+                        pk_val+=new_table_row.get(pk);    
+                    }
+                    if(pk_vals.contains(pk_val)){
+                        return "primary key constraint";
+                    }
+                    pk_vals.add(pk_val);
+                }
+
+                if(table.getUnique_columns().size()>0){
+                    String u_val="";
+                    for(String uk : table.getUnique_columns()){
+                        u_val+=new_table_row.get(uk);    
+                    }
+                    if(u_vals.contains(u_val)){
+                        return "unique key constraint";
+                    }
+                    u_vals.add(u_val);
+                }
+            }
+        }
+        
         
         return null;
     }

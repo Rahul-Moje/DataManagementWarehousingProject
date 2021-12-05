@@ -1,9 +1,13 @@
 package login;
 import java.io.Console;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import common.Utility;
 
 public class UserInput {
+
+    final Pattern alpha_numeric_pattern = Pattern.compile("^[a-zA-Z0-9]+$");
 
     static Console console;
     User user;
@@ -57,9 +61,22 @@ public class UserInput {
 
         while(result == LoginRegisterStatus.USER_ALREADY_EXISTS){
             String username = Utility.enter_in_console("Enter username:", console);
+
+            while(!is_alphanumeric(username)){
+                username = Utility.enter_in_console("Enter username:", console);
+            }
+            
             String password = Utility.enter_in_console("Enter password:", console);
+
+            while(!is_alphanumeric(password)){
+                password = Utility.enter_in_console("Enter password:", console);
+            }
+
             String security_question = Utility.enter_in_console("Enter a security question:", console);
             String security_question_answer = Utility.enter_in_console("Answer of the security question:", console);
+
+            
+
             user = new User(null, username, password, security_question, security_question_answer);
             UserProfileIO userProfileIO = new UserProfileIO();
             
@@ -82,6 +99,15 @@ public class UserInput {
         }
         return false;
         
+    }
+
+    private boolean is_alphanumeric(String input) {
+        Matcher matcher = alpha_numeric_pattern.matcher(input);
+        if(!matcher.matches()){
+            System.out.println("Input should be in apha numeric format.");
+            return false;
+        }
+        return true;
     }
 
     public String select_dbms_operation(){

@@ -1,5 +1,6 @@
 package queries.query_execution;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -19,6 +20,21 @@ public class Table {
     String rhs_value;
     String set_lhs_column;
     String set_rhs_value;
+    List<String> not_null_columns;
+    List<String> unique_columns;
+    List<String> primary_keys;
+    HashMap<String,HashMap<String,String>> column_to_referencetable_to_column;
+
+
+    
+    public Table() {
+        column_to_datatype = new HashMap<>();
+        values = new ArrayList<>();
+        not_null_columns = new ArrayList<>();
+        unique_columns = new ArrayList<>();
+        primary_keys = new ArrayList<>();
+        column_to_referencetable_to_column = new HashMap<>();
+    }
 
     public String getDatabase() {
         return database;
@@ -116,6 +132,66 @@ public class Table {
 
     public String getSet_rhs_value() {
         return this.set_rhs_value;
+    }
+
+    public List<String> getNot_null_columns() {
+        if(not_null_columns == null){
+            not_null_columns = new ArrayList<>();
+        }
+        return not_null_columns;
+    }
+
+    public void setNot_null_columns(List<String> not_null_columns) {
+        this.not_null_columns = not_null_columns;
+    }
+
+    public List<String> getUnique_columns() {
+        if(unique_columns == null){
+            unique_columns = new ArrayList<>();
+        }
+        return unique_columns;
+    }
+
+    public void setUnique_columns(List<String> unique_columns) {
+        this.unique_columns = unique_columns;
+    }
+
+    public void addUnique_column(String unique_column) {
+        if(unique_columns == null){
+            unique_columns = new ArrayList<>();
+        }
+        this.unique_columns.add(unique_column);
+    }
+
+    public void setPrimary_keys(List<String> primary_keys) {
+        this.primary_keys = primary_keys;
+    }
+
+    public void addNot_null_column(String not_null_column) {
+        if(not_null_columns == null){
+            not_null_columns = new ArrayList<>();
+        }
+        this.not_null_columns.add(not_null_column);
+    }
+
+    public void addPrimary_Key(String key) {
+        if(primary_keys == null){
+            primary_keys = new ArrayList<>();
+        }
+        this.primary_keys.add(key);
+    }
+
+    public List<String> getPrimary_keys(){
+        return this.primary_keys;
+    }
+
+    public HashMap<String, HashMap<String, String>> getColumn_to_referencetable_to_column() {
+        return column_to_referencetable_to_column;
+    }
+
+    public void setColumn_to_referencetable_to_column(
+            HashMap<String, HashMap<String, String>> column_to_referencetable_to_column) {
+        this.column_to_referencetable_to_column = column_to_referencetable_to_column;
     }
 
     
