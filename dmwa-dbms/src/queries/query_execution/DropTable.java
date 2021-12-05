@@ -27,13 +27,15 @@ public class DropTable {
             if(Utility.is_not_null_empty(file_content_str)){
                 int count = 0;
                 String[] rows = file_content_str.split(Constants.LINE_SEPARATOR);
-                final_file_content+=rows[0]+Constants.LINE_SEPARATOR;
+                final_file_content+=rows[0];
                 for(String row: rows){
                     if(count > 0){
+                        // System.out.println("---row---- "+row);
                         String[] cell_data = row.split(Constants.DELIMITER);
+                        // System.out.println("---cell_data---- "+cell_data.toString());
                         String table_name_from_file = cell_data[0];
                         if(!table_name.equalsIgnoreCase(table_name_from_file)){
-                            final_file_content+=rows[count]+Constants.LINE_SEPARATOR;
+                            final_file_content+=Constants.LINE_SEPARATOR+rows[count];//+Constants.LINE_SEPARATOR;
                         }
                     }
                     count++;      

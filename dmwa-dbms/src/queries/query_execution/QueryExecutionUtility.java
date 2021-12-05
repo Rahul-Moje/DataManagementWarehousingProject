@@ -1,6 +1,7 @@
 package queries.query_execution;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -104,51 +105,34 @@ public class QueryExecutionUtility {
                             break;
                     }
                     break;
-                case "float":
-                    Float rhs_float = Utility.is_not_null_empty(row.get(lhs_colname)) ? Float.valueOf(row.get(lhs_colname)) : 0.0f;
-                    if(operator.equalsIgnoreCase("is null")) return !Utility.is_not_null_empty(String.valueOf(rhs_float));
-                    if(operator.equalsIgnoreCase("is not null")) return Utility.is_not_null_empty(String.valueOf(rhs_float));
-                    Float rhs_from_condition_float = Utility.is_not_null_empty(rhs_value) ? Float.valueOf(rhs_value) : 0.0f;
-                    switch (operator) {
-                        case "=":
-                            return rhs_from_condition_float == rhs_float;
-                        case "!=":
-                            return rhs_float != rhs_from_condition_float;
-                        case ">=":
-                            return rhs_float >= rhs_from_condition_float;
-                        case ">":
-                            return rhs_float > rhs_from_condition_float;
-                        case "<=":
-                            return rhs_float <= rhs_from_condition_float;
-                        case "<":
-                            return rhs_float < rhs_from_condition_float;
-                        default:
-                            break;
-                    }
-                    break;
                 case "integer":
-                    
+                case "float":
                     if(operator.equalsIgnoreCase("is null")) return !Utility.is_not_null_empty(String.valueOf(row.get(lhs_colname)));
                     if(operator.equalsIgnoreCase("is not null")) return Utility.is_not_null_empty(String.valueOf(row.get(lhs_colname)));
 
-                    if(!Utility.is_not_null_empty(row.get(lhs_colname)) ) return false;
-                    if(!Utility.is_not_null_empty(rhs_value) ) return false;
-
-                    Integer rhs_integer = Integer.valueOf(row.get(lhs_colname));
-                    Integer rhs_from_condition_integer = Integer.valueOf(rhs_value);
+                    BigDecimal rhs_float = BigDecimal.ZERO;
+                    BigDecimal rhs_from_condition_float = BigDecimal.ZERO;
+                    int comparedValue = 0;
+                    if (!row.get(lhs_colname).isBlank()) {
+                        rhs_float = new BigDecimal(row.get(lhs_colname));
+                    }
+                    if (rhs_value != null && !rhs_value.isBlank()) {
+                        rhs_from_condition_float = new BigDecimal(rhs_value);
+                        comparedValue = rhs_float.compareTo(rhs_from_condition_float);
+                    }
                     switch (operator) {
                         case "=":
-                            return rhs_integer == rhs_from_condition_integer;
+                            return comparedValue==0;
                         case "!=":
-                            return rhs_integer != rhs_from_condition_integer;
+                            return comparedValue!=0;
                         case ">=":
-                            return rhs_integer >= rhs_from_condition_integer;
+                            return comparedValue>=0;
                         case ">":
-                            return rhs_integer > rhs_from_condition_integer;
+                            return comparedValue>0;
                         case "<=":
-                            return rhs_integer <= rhs_from_condition_integer;
+                            return comparedValue<=0;
                         case "<":
-                            return rhs_integer < rhs_from_condition_integer ;
+                            return comparedValue<0;
                         default:
                             break;
                     }
@@ -164,15 +148,15 @@ public class QueryExecutionUtility {
                         Date rhs_from_condition_date = Date.valueOf(rhs_value);
                         switch (operator) {
                             case "=":
-                                return rhs_date == rhs_from_condition_date ;
+                                return rhs_date.equals(rhs_from_condition_date) ;
                             case "!=":
-                                return rhs_date != rhs_from_condition_date;
+                                return !rhs_date.equals(rhs_from_condition_date);
                             case ">=":
-                                return rhs_date == rhs_from_condition_date || rhs_date.after(rhs_from_condition_date) ;
+                                return rhs_date.equals(rhs_from_condition_date) || rhs_date.after(rhs_from_condition_date) ;
                             case ">":
                                 return rhs_date.after(rhs_from_condition_date) ;
                             case "<=":
-                                return rhs_date == rhs_from_condition_date || rhs_date.before(rhs_from_condition_date) ;
+                                return rhs_date.equals(rhs_from_condition_date) || rhs_date.before(rhs_from_condition_date) ;
                             case "<":
                                 return rhs_date.before(rhs_from_condition_date) ;
                             default:
