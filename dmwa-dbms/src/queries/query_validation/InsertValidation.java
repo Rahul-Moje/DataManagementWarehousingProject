@@ -69,7 +69,6 @@ public class InsertValidation {
             int count = 0;
             while (m.find()) {
                 HashMap<String,String> row = new HashMap<>();
-                String pk_val = "";
                 String str = m.group();
                 String str_between_brackets = (String) str.subSequence(1, str.length()-1);
                 String[] elements = str_between_brackets.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
@@ -101,7 +100,6 @@ public class InsertValidation {
                         row.put(columns.get(i), val);
                     }
                 }
-                // System.out.println("----pk_val---- "+pk_val);
                 if(count > 0){
                     rows.add(row);
                 }

@@ -2,6 +2,7 @@ package queries.query_validation;
 
 import java.util.List;
 
+import common.Utility;
 import queries.query_execution.Table;
 
 public class DropTableValidation {
@@ -23,7 +24,12 @@ public class DropTableValidation {
 
         //check if table exists
         table.setTable_name(tokens.get(2)) ;
-        return util.check_table_exists(table, workspace_folder);
+        String error= util.check_table_exists(table, workspace_folder);
+        if(Utility.is_not_null_empty(error)){
+            return error;
+        }
+
+        return Utility.return_if_foreign_key(table, workspace_folder);
         
     }
     

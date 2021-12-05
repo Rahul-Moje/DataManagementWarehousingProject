@@ -2,6 +2,7 @@ package queries.query_validation;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -163,14 +164,18 @@ public class QueryValidationUtility {
                                     }
                                     break;
                                 case "integer":
-                                    // System.out.println("---integer integer-- ");
-                                    if(Integer.valueOf(value1)==Integer.valueOf(value2)){
-                                        ++count;
-                                    }
-                                    break;
                                 case "float":
-                                    // System.out.println("---float float-- ");
-                                    if(Float.valueOf(value1)==Float.valueOf(value2)){
+                                    BigDecimal numCellValue = BigDecimal.ZERO;
+                                    BigDecimal numRhsValue = BigDecimal.ZERO;
+                                    int comparedValue = 0;
+                                    if (!value1.isBlank()) {
+                                        numCellValue = new BigDecimal(value1);
+                                    }
+                                    if (value2 != null && !value2.isBlank()) {
+                                        numRhsValue = new BigDecimal(value2);
+                                        comparedValue = numCellValue.compareTo(numRhsValue);
+                                    }
+                                    if(comparedValue==0){
                                         ++count;
                                     }
                                     break;

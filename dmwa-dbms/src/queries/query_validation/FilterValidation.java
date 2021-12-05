@@ -15,12 +15,12 @@ public class FilterValidation {
         Arrays.asList(
             "=",
             "!=",
-            "<=",
             "<",
-            ">=",
+            "<=",
             ">",
-            "is not null",
+            ">=",
             "is null",
+            "is not null",
             "like"
     ));
 
@@ -82,7 +82,6 @@ public class FilterValidation {
         for(String operator: operators){
             if(where_clause.contains(operator)){
                 table.setOperator(operator);
-                break;
             }
         }
         if(!Utility.is_not_null_empty(table.getOperator())){
@@ -92,7 +91,8 @@ public class FilterValidation {
         String lhs_colname = where_clause.split(table.getOperator())[0].trim();
         String rhs_value = where_clause.split(table.getOperator())[1].trim();
 
-        
+        System.out.println("--table.getColumn_to_datatype()--- "+table.getColumn_to_datatype().toString());
+        System.out.println("--tlhs_colname--- "+lhs_colname);
         if(table.getColumn_to_datatype().containsKey(lhs_colname)){
             String data_type = table.getColumn_to_datatype().get(lhs_colname);
             if(data_type.equalsIgnoreCase("nvarchar")){

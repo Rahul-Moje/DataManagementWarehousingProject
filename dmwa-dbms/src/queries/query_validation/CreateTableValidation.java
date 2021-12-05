@@ -70,29 +70,29 @@ public class CreateTableValidation {
 
 
     private String validate_foreign_keys(Table table, String workspace_folder) {
-        List<TableMetaData> tables_metadata = RetrieveTableInfo.getTables(workspace_folder);
+        // List<TableMetaData> tables_metadata = RetrieveTableInfo.getTables(workspace_folder);
+        HashMap<String, TableMetaData> table_to_metadata = RetrieveTableInfo.getMapOfTableNameToInfo(workspace_folder);
         HashMap<String,HashMap<String,String>> column_to_referencetable_to_column = table.getColumn_to_referencetable_to_column();
         if(column_to_referencetable_to_column!=null && column_to_referencetable_to_column.size()>0){
             for(String fk: column_to_referencetable_to_column.keySet()){
+                String datatype_of_main_tablecol = table.getColumn_to_datatype().get(fk);
                 HashMap<String,String> table_col = column_to_referencetable_to_column.get(fk);
                 for(String referenced_table: table_col.keySet()){
                     // System.out.println("---referenced_table---"+referenced_table);
                     String refereneced_column = table_col.get(referenced_table);
 
                     // System.out.println("---refereneced_column---"+refereneced_column);
-                    boolean match_flag = false;
-                    for(TableMetaData tmd: tables_metadata){
-
-                        // System.out.println("---tmd--- "+tmd.toString());
-                        if(tmd.getTable_name().equalsIgnoreCase(referenced_table)){
-                            if(tmd.getCol_datatype().containsKey(refereneced_column)){
-                                match_flag = true;
-                                break;
-                            }
-                        }
+                    if(!table_to_metadata.containsKey(referenced_table)){
+                        return referenced_table+ ": reference table does not exist";
                     }
-                    if(match_flag == false){
-                        return "incorrect referenced table name/ column name";
+                    TableMetaData tmd = table_to_metadata.get(referenced_table);
+
+                    if(!tmd.getCol_datatype().containsKey(refereneced_column)){
+                        return refereneced_column+": referenced column does not exist in "+referenced_table;
+                    }
+
+                    if(!tmd.getCol_datatype().get(refereneced_column).equalsIgnoreCase(datatype_of_main_tablecol)){
+                        return "incompatible datatypes of foreign key "+fk+" and "+refereneced_column;
                     }
 
                 }

@@ -6,9 +6,14 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.io.IOUtils;
+
+import queries.query_execution.Table;
+import queries.query_execution.TableMetaData;
 
 public class Utility {
 
@@ -84,6 +89,21 @@ public class Utility {
         fileWriter.flush();
         fileWriter.close();
 
+    }
+
+    public static String return_if_foreign_key(Table table, String workspace_folder) {
+        List<TableMetaData> tables_info = RetrieveTableInfo.getTables(workspace_folder);
+
+        for(TableMetaData tmd: tables_info){
+            HashMap<String,HashMap<String,String>> foreign_map = tmd.getColumn_to_referencetable_to_column();
+            for(String fk: foreign_map.keySet()){
+                if(foreign_map.get(fk).containsKey(table.getTable_name())){
+                    return "Cannot delete the table since it is refenced by another table- "+tmd.getTable_name();
+                }
+            }
+
+        }
+        return null;
     }
     
 }
