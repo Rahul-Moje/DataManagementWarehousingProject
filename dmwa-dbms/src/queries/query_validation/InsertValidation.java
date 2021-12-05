@@ -44,8 +44,18 @@ public class InsertValidation {
         }
 
         //validate the values part
-        return validate_values(query, table);
+        error = validate_values(query, table);
+        if(Utility.is_not_null_empty(error)){
+            return error;
+        }
 
+        error= util.validate_primary_key_constraint(table, workspace_folder);
+        if(Utility.is_not_null_empty(error)){
+            return error;
+        }
+
+        return util.validate_foreign_key_constraint(table, workspace_folder);
+        
     }
 
     private String validate_values(String query, Table table) {
@@ -55,9 +65,11 @@ public class InsertValidation {
             Matcher m = pattern.matcher(query);
             List<HashMap<String,String>> rows = new ArrayList<>();
             List<String> columns = new ArrayList<String>();
+
             int count = 0;
             while (m.find()) {
                 HashMap<String,String> row = new HashMap<>();
+                String pk_val = "";
                 String str = m.group();
                 String str_between_brackets = (String) str.subSequence(1, str.length()-1);
                 String[] elements = str_between_brackets.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
@@ -70,15 +82,33 @@ public class InsertValidation {
                         columns.add(val.toLowerCase());
                     }
                     else{
+                        String column = columns.get(i);
+                        if(table.getPrimary_keys().contains(column)){
+                            //check for not null
+                            if(val==null || val.trim().isEmpty()){
+                                return "Primary key cannot be null";
+                            }
+                        }
+
+
+                        //check for not null
+                        if(table.getUnique_columns().contains(column)){
+                            if(val==null || val.trim().isEmpty()){
+                                return "not null constraint";
+                            }
+                        }
+
                         row.put(columns.get(i), val);
                     }
                 }
+                // System.out.println("----pk_val---- "+pk_val);
                 if(count > 0){
                     rows.add(row);
                 }
                 count++;
             }
             table.setValues(rows);
+            // System.out.println(table.getValues());
         }
         catch(Exception e){
             e.printStackTrace();

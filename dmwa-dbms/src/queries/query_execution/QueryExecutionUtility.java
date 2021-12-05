@@ -23,13 +23,16 @@ public class QueryExecutionUtility {
         try {
             file_content_str = Utility.fetch_file_content(file_path);
             
-            if(!Utility.is_not_null_empty(file_content_str) || rewrite == true){
+            if(!Utility.is_not_null_empty(file_content_str) || rewrite == true) {
                 data = String.join(Constants.DELIMITER, col_datatype.keySet());
                 data+=line_separator;
+                // System.out.println("---data first---- "+data);
             }
-            else{
+            else {
                 data = file_content_str;
-            } 
+            }
+            
+
             for(int i= 0; i<rows.size(); ++i){
                 HashMap<String,String> row = rows.get(i);
                 for(String column_name: col_datatype.keySet()){
@@ -51,6 +54,7 @@ public class QueryExecutionUtility {
                     }
                     data += Constants.DELIMITER;
                 }
+                // System.out.println("---data last---- "+data);
                 data = data.substring(0, data.length()-1)+line_separator;
             }
         } catch (Exception e) {
