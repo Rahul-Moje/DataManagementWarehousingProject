@@ -63,8 +63,6 @@ public class DataModelDriver {
                 List<String> not_null_columns=tableMeta.getNot_null_columns();
                 HashMap<String,HashMap<String,String>> column_to_referencetable_to_column=tableMeta.getColumn_to_referencetable_to_column();
                 HashMap<String,String> colInfo=tableMeta.getCol_datatype();
-
-                System.out.println(colInfo);
                for (Map.Entry<String, String> entry : colInfo.entrySet()) 
                 {
                     String columnName = entry.getKey();
