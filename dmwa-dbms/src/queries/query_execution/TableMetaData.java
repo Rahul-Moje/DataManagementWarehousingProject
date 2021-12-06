@@ -17,6 +17,7 @@ public class TableMetaData {
         col_datatype = new HashMap<>();
         primary_keys = new ArrayList<>();
         unique_columns = new ArrayList<>();
+        not_null_columns = new ArrayList<>();
         column_to_referencetable_to_column = new HashMap<>();
     }
 
