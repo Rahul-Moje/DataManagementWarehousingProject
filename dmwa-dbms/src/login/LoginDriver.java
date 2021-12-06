@@ -63,10 +63,10 @@ public class LoginDriver {
             new QueryDriver(userInput.getUser()).run();
         }
         else if(dbms_option.equals("2")){
-            ExportDriver.run();
+            new ExportDriver(userInput.getUser()).run();
         }
         else if(dbms_option.equals("3")){
-            DataModelDriver.run();
+            new DataModelDriver(userInput.getUser()).run();
         }
         else if(dbms_option.equals("4")){
             new AnalyticsDriver(userInput.getUser()).run();
