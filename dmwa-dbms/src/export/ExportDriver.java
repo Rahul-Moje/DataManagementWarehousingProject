@@ -58,8 +58,8 @@ public class ExportDriver {
 
     private void export_SQLDump(String exportType) {
         try {
-            String query= DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss").format(LocalDateTime.now())+"\n";
-
+           String query="CREATE DATABASE "+dbName+";\n";
+           query=query+"USE "+dbName+";\n";
             List<TableMetaData> tableMetaList=RetrieveTableInfo.getTables(workspace_folder+"//"+dbName); 
             for(TableMetaData tableMeta:tableMetaList)
             {
