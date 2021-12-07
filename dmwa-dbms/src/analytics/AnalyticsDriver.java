@@ -8,10 +8,11 @@ import org.json.JSONObject;
 import queries.query_validation.UseDatabaseValidation;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class AnalyticsDriver {
 
@@ -19,6 +20,8 @@ public class AnalyticsDriver {
     private UseDatabaseValidation useDatabaseValidation;
     private static String FILE_DIRECTORY = ".//workspace";
     private String REGEX = "\".*\"";
+    private StringBuilder stringBuilder;
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd_HHmm1ss");
 
     private static final String MENU = "***Welcome to Analytics**\n" +
             "1. Total number of queries executed on database\n" +
@@ -37,12 +40,24 @@ public class AnalyticsDriver {
     }
 
     public void run() {
+        stringBuilder = new StringBuilder("Analytics started\n");
         String input = Utility.enter_in_console("Enter query to select database for analytics", System.console());
         String result = useDatabaseValidation.validate(input, user.getUsername_encrypted());
         if(null == result) {
             runAnalyticsOnDatabase(input.split(" ")[2]);
         } else {
             System.out.println("Wrong database entered. Back to main menu");
+        }
+        stringBuilder.append("Analytics ended\n");
+        writeAnalyticsToFile();
+    }
+
+    private void writeAnalyticsToFile() {
+        Path path = Paths.get(FILE_DIRECTORY + "\\" + user.getUsername_encrypted() + "\\logs\\analytics_" + DATE_FORMAT.format(new Date()));
+        try {
+            Files.write(path, Collections.singleton(stringBuilder.toString()));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -117,6 +132,7 @@ public class AnalyticsDriver {
             }
         }
         System.out.println("Total number of queries executed by " + user.getUsername_plain() + " is " + count);
+        stringBuilder.append("Total number of queries executed by " + user.getUsername_plain() + " is " + count + "\n");
     }
 
     private boolean isLogRelatedToDatabase(JSONObject jsonObject, String databaseName) {
@@ -153,11 +169,14 @@ public class AnalyticsDriver {
     private void displayQueryStats(Map<String, Integer> countMap, DatabaseOperation operation) {
         if(countMap.size() == 0) {
             System.out.println("No " + operation.name() + " queries were executed by " + user.getUsername_plain());
+            stringBuilder.append("No " + operation.name() + " queries were executed by " + user.getUsername_plain() + "\n");
             return;
         }
         for(Map.Entry<String, Integer> entry : countMap.entrySet()) {
             System.out.println("Total number of " + operation.name() + " queries executed by " + user.getUsername_plain()
                     + " on table " + entry.getKey() + " is " + entry.getValue());
+            stringBuilder.append("Total number of " + operation.name() + " queries executed by " + user.getUsername_plain()
+                    + " on table " + entry.getKey() + " is " + entry.getValue() + "\n");
         }
     }
 
