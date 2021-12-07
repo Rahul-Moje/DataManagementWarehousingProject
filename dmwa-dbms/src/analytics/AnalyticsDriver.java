@@ -21,7 +21,7 @@ public class AnalyticsDriver {
     private static String FILE_DIRECTORY = ".//workspace";
     private String REGEX = "\".*\"";
     private StringBuilder stringBuilder;
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd_HHmm1ss");
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd_HHmmss");
 
     private static final String MENU = "***Welcome to Analytics**\n" +
             "1. Total number of queries executed on database\n" +
