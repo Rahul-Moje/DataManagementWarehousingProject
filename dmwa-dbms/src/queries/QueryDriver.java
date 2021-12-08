@@ -50,18 +50,21 @@ public class QueryDriver {
             }
             if(queryInput.equals("2")){
                 break;
-            }//author ruhityagi b00872269
-          //author janhavisonawane b00881787
+            }
+            //author janhavisonawane b00881787
+            //author ruhityagi b00872269
             boolean isTxn = isQueryTransactional(queryInput);
             
             String[] queryList =  queryInput.split(";");
             
             Transaction tx = DefaultTransactionManager.getTransaction();
+            //add Log for transaction started
             for(int i =0; i< queryList.length; i++) {
-                String query = queryList[i];
-                if(query == null || query.length() < 15  ) {
+            	String query = queryList[i];
+                if(query == null || query.length() < 10  ) {
                     continue;
                 }
+                query = query.trim();
                 if(!isTxn){
                     queryIdentifier.setQuery(query);
                     queryIdentifier.run(true, tx);
@@ -69,9 +72,6 @@ public class QueryDriver {
                 }
                 else{
 
-                    //transaction_execution
-                    //Generate random number as transaction id
-                    
                     //Loop over queryList and snd true for last query
                     queryIdentifier.setQuery(query);
                     //give true to last query from query list or else give false

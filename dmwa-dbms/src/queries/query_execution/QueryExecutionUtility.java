@@ -65,14 +65,14 @@ public class QueryExecutionUtility {
                 // System.out.println("---data last---- "+data);
                 data = data.substring(0, data.length()-1)+line_separator;
             }
-        } catch (Exception e) {///exception handling added by JS,RT
+        } catch (Exception e) {///exception handling added by JS
             e.printStackTrace();
             txn.rollback();
             System.out.println("Rolling back transaction");
             return false;
         }
 
-        try {//added by JS,RT
+        try {//added by JS
         	//If commit flag true then call Commit on txn 
         	txn.setTempData(file_path, data);
         	if(commitFlag) {

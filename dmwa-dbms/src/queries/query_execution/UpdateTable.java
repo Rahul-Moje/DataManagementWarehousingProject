@@ -18,6 +18,13 @@ public class UpdateTable {
         qUtil = new QueryExecutionUtility();
     };
     
+    /**
+     * Janhavi
+     * @param txn
+     * @param table
+     * @param file_path
+     * @return
+     */
     public List<HashMap<String,String>> getRecentData(Transaction txn, Table table, String file_path) {
 		String txnData = txn.getTempData().get(file_path);
 		if(txnData == null) return table.getValues();
@@ -27,7 +34,6 @@ public class UpdateTable {
 		String[] headers = null;
 		if(rows.length > 0) {
 			headers = rows[0].split("~");
-			System.out.println(Arrays.toString(headers));
 		}
 		List<HashMap<String,String>> data = new ArrayList<>();
 			for(int i=1; i< rows.length; i++) {
@@ -39,7 +45,6 @@ public class UpdateTable {
 				}
 				data.add(map);
 			}
-			System.out.println(data);
 			return data;
 	}
     
