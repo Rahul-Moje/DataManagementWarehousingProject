@@ -91,7 +91,6 @@ public class Utility {
             input = scanner.nextLine();
             if(!is_not_null_empty(input)){
                 System.out.println("Input cannot be blank. Enter again.");
-                scanner.close();
                 return enter_in_console(question, console);
             }
 
@@ -99,7 +98,6 @@ public class Utility {
             //isSure= console.readLine().equalsIgnoreCase("Y") ? true : false;
             isSure = true;
         }
-        scanner.close();
         return input;
     }
 
