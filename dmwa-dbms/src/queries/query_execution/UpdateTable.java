@@ -2,9 +2,13 @@ package queries.query_execution;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import common.Constants;
+import transaction.Transaction;
 
 public class UpdateTable {
 
@@ -12,14 +16,41 @@ public class UpdateTable {
 
     public UpdateTable(){
         qUtil = new QueryExecutionUtility();
-    }
+    };
+    
+    public List<HashMap<String,String>> getRecentData(Transaction txn, Table table, String file_path) {
+		String txnData = txn.getTempData().get(file_path);
+		if(txnData == null) return table.getValues();
 
-    public Boolean execute(Table table, String workfolder_in_db) {
+		String[] rows = txnData.split("\r\n");
+		
+		String[] headers = null;
+		if(rows.length > 0) {
+			headers = rows[0].split("~");
+			System.out.println(Arrays.toString(headers));
+		}
+		List<HashMap<String,String>> data = new ArrayList<>();
+			for(int i=1; i< rows.length; i++) {
+				HashMap<String, String> map = new HashMap<>();
+				
+				String[] cells = rows[i].split("~");
+				for(int j=0; j< headers.length; j++) {
+					map.put(headers[j], cells[j]);
+				}
+				data.add(map);
+			}
+			System.out.println(data);
+			return data;
+	}
+    
+
+    public Boolean execute(Table table , String workfolder_in_db, boolean commitFlag, Transaction tx) {
 
         try{
             List<HashMap<String,String>> filterted_rows = new ArrayList<>();
-            List<HashMap<String,String>> rows = table.getValues();
-
+            String file_path = ".//workspace//"+workfolder_in_db+"//"+table.getTable_name()+Constants.DATA_FILE_EXTENSION;
+            List<HashMap<String,String>> rows = getRecentData(tx, table, file_path);
+            //Map<String,String> updatedRows = new HashMap<>();
             //for primary key validation
             List<String> pk_values = new ArrayList<>();
 
@@ -32,7 +63,7 @@ public class UpdateTable {
                 String pk_val = "";
 
                 if(qUtil.check_where_condition(row, table)){
-                    row.remove(table.getSet_lhs_column());
+                    row.remove(table.getSet_lhs_column(), table.getSet_rhs_value());
                     row.put(table.getSet_lhs_column(), table.getSet_rhs_value());
                 }
 
@@ -50,7 +81,7 @@ public class UpdateTable {
                     }
                 }
                 
-                if(pk_values.contains(pk_val)){
+                if(pk_values.contains(pk_val) && pk_val.length() > 1){
                     System.out.println("Primary key constraint. Unable to update with duplicate records.");
                     return false;
                 }
@@ -92,8 +123,7 @@ public class UpdateTable {
                 filterted_rows.add(row);
             }
             table.setValues(filterted_rows);
-
-            return qUtil.insertData(table, workfolder_in_db, true);
+            return qUtil.insertData(table, workfolder_in_db, true, commitFlag, tx);
         }
         catch(Exception e){
             e.printStackTrace();
