@@ -16,16 +16,28 @@ public class UserInput {
         console = System.console();
     }
 
+    
+    /** 
+     * @return User
+     */
     public User getUser(){
         return this.user;
     }
 
+    
+    /** 
+     * @return String
+     */
     public String input_for_login_registration(){
         return Utility.enter_in_console("Choose from following options (1/2):"
                                     +"\n1. Login"
                                     +"\n2. Register", console);
     }
 
+    
+    /** 
+     * @return boolean
+     */
     public boolean login(){
         System.out.println("\n\n\t\t\t*********** Login ************\t\t\t\n"); 
 
@@ -54,6 +66,10 @@ public class UserInput {
 
     }
 
+    
+    /** 
+     * @return boolean
+     */
     public boolean register(){
 
         System.out.println("\n\n\t\t\t*********** Register ************\t\t\t\n"); 
@@ -101,6 +117,11 @@ public class UserInput {
         
     }
 
+    
+    /** 
+     * @param input
+     * @return boolean
+     */
     private boolean is_alphanumeric(String input) {
         Matcher matcher = alpha_numeric_pattern.matcher(input);
         if(!matcher.matches()){
@@ -110,6 +131,10 @@ public class UserInput {
         return true;
     }
 
+    
+    /** 
+     * @return String
+     */
     public String select_dbms_operation(){
         return Utility.enter_in_console("Choose from following options (1/2/3/4): "
                                     +"\n1. Write Queries "

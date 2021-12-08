@@ -9,11 +9,14 @@ import common.Utility;
 
 public class CreateTable {
 
-    String file_path = ".//workspace//%s//metadata//table_info"+Constants.DATA_FILE_EXTENSION;
-    final String header = String.format("table_name%scolumns%sdata_types%sprimary_keys%sunique_keys%snot_null_keys%sforeign_key", 
-                        Constants.DELIMITER, Constants.DELIMITER,Constants.DELIMITER,Constants.DELIMITER,Constants.DELIMITER,Constants.DELIMITER);
+    String file_path = Constants.TABLE_INFO_FILE_PATH;
+    final String header = Constants.TABLE_INFO_HEADERS;
     
-
+    /** 
+     * @param table
+     * @param workspace_folder
+     * @return boolean
+     */
     public boolean execute(Table table, String workspace_folder) {
 
         setFile_path(workspace_folder);
@@ -28,6 +31,13 @@ public class CreateTable {
 
     }
 
+    
+    /** 
+     * create an entry of the table and its information
+     * write the entry to table_info.tsv
+     * @param table
+     * @throws IOException
+     */
     private void write_in_file(Table table) throws IOException {
         
         create_empty_file_if_not_exists();
@@ -60,6 +70,11 @@ public class CreateTable {
         }
     }
 
+    
+    /** 
+     * create empty file if table_info.tsv does not exist
+     * @throws IOException
+     */
     private void create_empty_file_if_not_exists() throws IOException {
         File file = new File(file_path);
         if(!file.exists()) {
@@ -68,6 +83,11 @@ public class CreateTable {
         }
     }
 
+    
+    /** 
+     * set workspace value in the table_info file path
+     * @param workspace_folder
+     */
     public void setFile_path(String workspace_folder) {
         this.file_path = String.format(file_path, workspace_folder);
     }

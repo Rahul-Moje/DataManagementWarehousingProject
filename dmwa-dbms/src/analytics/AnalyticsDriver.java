@@ -19,7 +19,6 @@ public class AnalyticsDriver {
     private User user;
     private UseDatabaseValidation useDatabaseValidation;
     private static String FILE_DIRECTORY = ".//workspace";
-    private String REGEX = "\".*\"";
     private StringBuilder stringBuilder;
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd_HHmmss");
 
@@ -31,7 +30,7 @@ public class AnalyticsDriver {
             "5. Total number of insert queries executed on database \n" +
             "6. Total number of delete queries executed on database \n" +
             "7. Total number of drop queries executed on database \n" +
-            "8. Total number of tables within database\n" +
+            "8. Total number of tables(dropped or existing) within database\n" +
             "9. Return to main menu";
 
     public AnalyticsDriver(User user) {
@@ -61,6 +60,10 @@ public class AnalyticsDriver {
         }
     }
 
+    
+    /** 
+     * @param databaseName
+     */
     private void runAnalyticsOnDatabase(String databaseName) {
         String input = Utility.enter_in_console(MENU, System.console());
         JSONArray jsonArray = null;
@@ -115,6 +118,11 @@ public class AnalyticsDriver {
         }
     }
 
+    
+    /** 
+     * @return JSONArray
+     * @throws IOException
+     */
     private JSONArray readSystemLogs() throws IOException {
         String file_content_str = Utility.fetch_file_content(FILE_DIRECTORY + "\\" + user.getUsername_encrypted() + "\\logs\\system.logs");
         if(Utility.is_not_null_empty(file_content_str)) {
@@ -123,6 +131,11 @@ public class AnalyticsDriver {
         return null;
     }
 
+    
+    /** 
+     * @param databaseName
+     * @param jsonArray
+     */
     private void findTotalNumberOfQueries(String databaseName, JSONArray jsonArray) {
         int count = 0;
         for(int i=0;i<jsonArray.length();i++) {
@@ -135,6 +148,12 @@ public class AnalyticsDriver {
         stringBuilder.append("Total number of queries executed by " + user.getUsername_plain() + " is " + count + "\n");
     }
 
+    
+    /** 
+     * @param jsonObject
+     * @param databaseName
+     * @return boolean
+     */
     private boolean isLogRelatedToDatabase(JSONObject jsonObject, String databaseName) {
         if(jsonObject.getString("database").equals(databaseName)
                 && jsonObject.getString("user").equalsIgnoreCase(user.getUsername_plain())
@@ -150,6 +169,11 @@ public class AnalyticsDriver {
         return false;
     }
 
+    
+    /** 
+     * @param databaseName
+     * @param jsonArray
+     */
     private void findTotalNumberOfCreateQueries(String databaseName, JSONArray jsonArray) {
         Map<String, Integer> countMap = new HashMap<>();
         for(int i=0;i<jsonArray.length();i++) {
@@ -166,6 +190,11 @@ public class AnalyticsDriver {
         displayQueryStats(countMap, DatabaseOperation.CREATE_TABLE);
     }
 
+    
+    /** 
+     * @param countMap
+     * @param operation
+     */
     private void displayQueryStats(Map<String, Integer> countMap, DatabaseOperation operation) {
         if(countMap.size() == 0) {
             System.out.println("No " + operation.name() + " queries were executed by " + user.getUsername_plain());
@@ -180,10 +209,21 @@ public class AnalyticsDriver {
         }
     }
 
+    
+    /** 
+     * @param jsonObject
+     * @param operation
+     * @return boolean
+     */
     private boolean isQueryOfType(JSONObject jsonObject, DatabaseOperation operation) {
         return jsonObject.getString("query_type").equals(operation.name());
     }
 
+    
+    /** 
+     * @param databaseName
+     * @param jsonArray
+     */
     private void findTotalNumberOfUpdateQueries(String databaseName, JSONArray jsonArray) {
         Map<String, Integer> countMap = new HashMap<>();
         for(int i=0;i<jsonArray.length();i++) {
@@ -200,6 +240,11 @@ public class AnalyticsDriver {
         displayQueryStats(countMap, DatabaseOperation.UPDATE);
     }
 
+    
+    /** 
+     * @param databaseName
+     * @param jsonArray
+     */
     private void findTotalNumberOfInsertQueries(String databaseName, JSONArray jsonArray) {
         Map<String, Integer> countMap = new HashMap<>();
         for(int i=0;i<jsonArray.length();i++) {
@@ -216,6 +261,11 @@ public class AnalyticsDriver {
         displayQueryStats(countMap, DatabaseOperation.INSERT);
     }
 
+    
+    /** 
+     * @param databaseName
+     * @param jsonArray
+     */
     private void findTotalNumberOfSelectQueries(String databaseName, JSONArray jsonArray) {
         Map<String, Integer> countMap = new HashMap<>();
         for(int i=0;i<jsonArray.length();i++) {
@@ -232,6 +282,11 @@ public class AnalyticsDriver {
         displayQueryStats(countMap, DatabaseOperation.SELECT);
     }
 
+    
+    /** 
+     * @param databaseName
+     * @param jsonArray
+     */
     private void findTotalNumberOfDeleteQueries(String databaseName, JSONArray jsonArray) {
         Map<String, Integer> countMap = new HashMap<>();
         for(int i=0;i<jsonArray.length();i++) {
@@ -248,6 +303,11 @@ public class AnalyticsDriver {
         displayQueryStats(countMap, DatabaseOperation.DELETE);
     }
 
+    
+    /** 
+     * @param databaseName
+     * @param jsonArray
+     */
     private void findTotalNumberOfDropQueries(String databaseName, JSONArray jsonArray) {
         Map<String, Integer> countMap = new HashMap<>();
         for(int i=0;i<jsonArray.length();i++) {
@@ -264,6 +324,11 @@ public class AnalyticsDriver {
         displayQueryStats(countMap, DatabaseOperation.DROP);
     }
 
+    
+    /** 
+     * @param databaseName
+     * @param jsonArray
+     */
     private void findTotalNumberOfTables(String databaseName, JSONArray jsonArray) {
         Set<String> tableNames = new HashSet<>();
         for(int i=0;i<jsonArray.length();i++) {
@@ -274,9 +339,11 @@ public class AnalyticsDriver {
                     tableNames.add(tableName);
                 }
             }
-            System.out.println("Total number of tables in database " + databaseName + " is " + tableNames.size());
-            System.out.println("Tables are " + tableNames);
         }
+        System.out.println("Total number of tables(dropped or existing) in database " + databaseName + " is " + tableNames.size());
+        stringBuilder.append("Total number of tables(dropped or existing) in database " + databaseName + " is " + tableNames.size());
+        System.out.println("Tables are " + tableNames);
+        stringBuilder.append("Tables are " + tableNames);
     }
 
 

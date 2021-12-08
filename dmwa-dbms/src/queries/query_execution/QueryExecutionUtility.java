@@ -1,6 +1,5 @@
 package queries.query_execution;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.HashMap;
@@ -8,26 +7,40 @@ import java.util.List;
 
 import common.Constants;
 import common.Utility;
+import transaction.Transaction;
 
 public class QueryExecutionUtility {
-    
-    public Boolean insertData(Table table, String workfolder_in_db, Boolean rewrite) {
-        HashMap<String,String> col_datatype = table.getColumn_to_datatype();
-        List<HashMap<String,String>> rows = table.getValues();
-        String line_separator = System.getProperty("line.separator");
 
+
+    
+    /** 
+     * insert data into the table's tsv file
+     * @param table
+     * @param workfolder_in_db
+     * @param rewrite
+     * @param commitFlag
+     * @param txn
+     * @return Boolean
+     */
+    public Boolean insertData(Table table, String workfolder_in_db, Boolean rewrite, 
+    											boolean commitFlag, Transaction txn) {
+
+        HashMap<String,String> col_datatype = table.getColumn_to_datatype();
+        String line_separator = System.getProperty("line.separator");
+        
         String file_path = ".//workspace//"+workfolder_in_db+"//"+table.getTable_name()+Constants.DATA_FILE_EXTENSION;
         Utility.check_create_file_path(file_path);
+        List<HashMap<String,String>> rows = table.getValues();
 
         String file_content_str;
         String data="";
         try {
-            file_content_str = Utility.fetch_file_content(file_path);
+        	String tmp_content = txn.getTempData().get(file_path);
+            file_content_str = tmp_content == null ? Utility.fetch_file_content(file_path) : tmp_content;
             
-            if(!Utility.is_not_null_empty(file_content_str) || rewrite == true) {
+            if(!Utility.is_not_null_empty(file_content_str) || rewrite) {
                 data = String.join(Constants.DELIMITER, col_datatype.keySet());
                 data+=line_separator;
-                // System.out.println("---data first---- "+data);
             }
             else {
                 data = file_content_str;
@@ -39,7 +52,7 @@ public class QueryExecutionUtility {
                 for(String column_name: col_datatype.keySet()){
                     switch(String.valueOf(col_datatype.get(column_name))){
                         case "nvarchar":
-                                data += row.get(column_name);
+                                data += row.get(column_name); 
                                 break;
                         case "integer":
                                 data += Integer.valueOf(row.get(column_name));
@@ -55,23 +68,36 @@ public class QueryExecutionUtility {
                     }
                     data += Constants.DELIMITER;
                 }
-                // System.out.println("---data last---- "+data);
                 data = data.substring(0, data.length()-1)+line_separator;
             }
-        } catch (Exception e) {
+        } catch (Exception e) {///exception handling added by JS
             e.printStackTrace();
+            txn.rollback();
+            System.out.println("Rolling back transaction");
             return false;
         }
 
-        try {
-            Utility.write(file_path, data);
-        } catch (IOException e) {
+        try {//added by JS
+        	//If commit flag true then call Commit on txn 
+        	txn.setTempData(file_path, data);
+        	if(commitFlag) {
+        		txn.commit();
+        		System.out.println(table.getValues().size()+" row(s) affected!");
+        	}
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
         return true;
     }
 
+    
+    /** 
+     * evaluate true if the condition matches
+     * @param row
+     * @param table
+     * @return boolean
+     */
     public boolean check_where_condition(HashMap<String,String> row, Table table) {
 
         try{

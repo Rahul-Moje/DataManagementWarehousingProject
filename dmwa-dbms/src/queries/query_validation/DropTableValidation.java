@@ -13,6 +13,14 @@ public class DropTableValidation {
         util = new QueryValidationUtility();
     }
 
+    
+    /** 
+     * validate drop table query
+     * @param query
+     * @param workspace_folder
+     * @param table
+     * @return String
+     */
     public String validate(String query, String workspace_folder, Table table) {
 
         query = util.removeLastSemiColon(query);

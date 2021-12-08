@@ -4,6 +4,13 @@ import common.Utility;
 
 public class CreateDatabase {
 
+    
+    /** 
+     * create a directory for database
+     * @param query
+     * @param workspace_folder
+     * @return boolean
+     */
     public boolean execute(String query, String workspace_folder){
         try{
             

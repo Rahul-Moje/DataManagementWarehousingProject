@@ -6,12 +6,18 @@ import java.io.IOException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import common.Constants;
 import common.Utility;
 
 public class LogWriter {
     
-    static String file_name = ".//workspace//%s//logs//system.logs";
+    static String file_name = Constants.SYSTEM_LOG_FILE_PATH;
 
+    
+    /** 
+     * create an entry of log and append in log file
+     * @param log
+     */
     public static void write(Log log) {
         setFile_name(log.getUser().getUsername_encrypted());
         JSONArray file_content;
@@ -40,6 +46,11 @@ public class LogWriter {
         }    
     }
 
+    
+    /** 
+     * set user's workspace name to the log file path
+     * @param username_encrypted
+     */
     private static void setFile_name(String username_encrypted){
         file_name = String.format(file_name, username_encrypted);
         Utility.check_create_file_path(file_name);
