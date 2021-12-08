@@ -31,7 +31,7 @@ public class AnalyticsDriver {
             "5. Total number of insert queries executed on database \n" +
             "6. Total number of delete queries executed on database \n" +
             "7. Total number of drop queries executed on database \n" +
-            "8. Total number of tables within database\n" +
+            "8. Total number of tables(dropped or existing) within database\n" +
             "9. Return to main menu";
 
     public AnalyticsDriver(User user) {
@@ -275,8 +275,8 @@ public class AnalyticsDriver {
                 }
             }
         }
-        System.out.println("Total number of tables in database " + databaseName + " is " + tableNames.size());
-        stringBuilder.append("Total number of tables in database " + databaseName + " is " + tableNames.size());
+        System.out.println("Total number of tables(dropped or existing) in database " + databaseName + " is " + tableNames.size());
+        stringBuilder.append("Total number of tables(dropped or existing) in database " + databaseName + " is " + tableNames.size());
         System.out.println("Tables are " + tableNames);
         stringBuilder.append("Tables are " + tableNames);
     }
