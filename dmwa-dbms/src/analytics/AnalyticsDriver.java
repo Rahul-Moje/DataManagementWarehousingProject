@@ -274,9 +274,11 @@ public class AnalyticsDriver {
                     tableNames.add(tableName);
                 }
             }
-            System.out.println("Total number of tables in database " + databaseName + " is " + tableNames.size());
-            System.out.println("Tables are " + tableNames);
         }
+        System.out.println("Total number of tables in database " + databaseName + " is " + tableNames.size());
+        stringBuilder.append("Total number of tables in database " + databaseName + " is " + tableNames.size());
+        System.out.println("Tables are " + tableNames);
+        stringBuilder.append("Tables are " + tableNames);
     }
 
 
