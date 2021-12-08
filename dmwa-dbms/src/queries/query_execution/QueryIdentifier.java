@@ -8,13 +8,13 @@ import queries.query_validation.*;
 import transaction.Transaction;
 
 public class QueryIdentifier {
-
+	
     String query;
     String workspace_folder;
     String selected_database;
     User user;
 
-    public QueryIdentifier(String query, User user){
+    public QueryIdentifier(String query, User user){//
         this.query = query.replaceAll("\\s", " ");
         this.user = user;
         this.workspace_folder = user.getUsername_encrypted();
@@ -148,7 +148,7 @@ public class QueryIdentifier {
                     if(isSuccess) {
                         int rows_after_deletion = table.getValues().size();
                         String result = (rows_before_deletion-rows_after_deletion)+" rows deleted successfully";
-                        System.out.println(result);
+//                        System.out.println(result);
                         new Log(user, DatabaseOperation.DELETE, selected_database, table.getTable_name(), query, result);
                     }  
                 }

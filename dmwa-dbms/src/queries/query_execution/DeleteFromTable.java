@@ -19,7 +19,7 @@ public class DeleteFromTable {
     
     
     public List<HashMap<String,String>> getRecentData(Transaction txn, Table table, String file_path) {
-		String txnData = txn.getTempData().get(file_path);
+		String txnData = txn.getTempData().get(file_path); //added by JS.RT
 		if(txnData == null) return table.getValues();
 
 		String[] rows = txnData.split("\r\n");
@@ -41,7 +41,7 @@ public class DeleteFromTable {
 			return data;
 	}
 
-    public Boolean execute(Table table, String workfolder_in_db, boolean commitFlag, Transaction tx) {
+    public Boolean execute(Table table, String workfolder_in_db, boolean commitFlag, Transaction tx) {// added commitFlag, tx by JS,RT
         
         try{
             List<HashMap<String,String>> filterted_rows = new ArrayList<>();
@@ -55,7 +55,7 @@ public class DeleteFromTable {
                 }
             }
             table.setValues(filterted_rows);
-            return qUtil.insertData(table, workfolder_in_db, true,true, tx);
+            return qUtil.insertData(table, workfolder_in_db, true,true, tx); //commintFlag set true
         }
         catch(Exception e){
             e.printStackTrace();

@@ -123,7 +123,7 @@ public class UpdateTable {
                 filterted_rows.add(row);
             }
             table.setValues(filterted_rows);
-            return qUtil.insertData(table, workfolder_in_db, true, commitFlag, tx);
+            return qUtil.insertData(table, workfolder_in_db, true, commitFlag, tx);//added by JS,RT
         }
         catch(Exception e){
             e.printStackTrace();

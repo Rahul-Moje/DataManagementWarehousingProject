@@ -50,7 +50,8 @@ public class QueryDriver {
             }
             if(queryInput.equals("2")){
                 break;
-            }
+            }//author ruhityagi b00872269
+          //author janhavisonawane b00881787
             boolean isTxn = isQueryTransactional(queryInput);
             
             String[] queryList =  queryInput.split(";");

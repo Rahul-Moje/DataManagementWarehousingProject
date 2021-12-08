@@ -16,8 +16,8 @@ import transaction.Transaction;
 
 public class QueryExecutionUtility {
 
-    public Boolean insertData(Table table, String workfolder_in_db, Boolean rewrite, 
-    											boolean commitFlag, Transaction txn) {
+    public Boolean insertData(Table table, String workfolder_in_db, Boolean rewrite,//insert-false;delete,update-true for rewrite 
+    											boolean commitFlag, Transaction txn) { //commitFlag, txn added by JS,RT.
         HashMap<String,String> col_datatype = table.getColumn_to_datatype();
         String line_separator = System.getProperty("line.separator");
         
@@ -65,14 +65,14 @@ public class QueryExecutionUtility {
                 // System.out.println("---data last---- "+data);
                 data = data.substring(0, data.length()-1)+line_separator;
             }
-        } catch (Exception e) {
+        } catch (Exception e) {///exception handling added by JS,RT
             e.printStackTrace();
             txn.rollback();
             System.out.println("Rolling back transaction");
             return false;
         }
 
-        try {
+        try {//added by JS,RT
         	//If commit flag true then call Commit on txn 
         	txn.setTempData(file_path, data);
         	if(commitFlag) {
