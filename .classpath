@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="dmwa-dbms/src"/>
+	<classpathentry kind="lib" path="dmwa-dbms/lib/commons-codec-1.15-javadoc.jar"/>
+	<classpathentry kind="lib" path="dmwa-dbms/lib/commons-codec-1.15-sources.jar"/>
+	<classpathentry kind="lib" path="dmwa-dbms/lib/commons-codec-1.15-test-sources.jar"/>
+	<classpathentry kind="lib" path="dmwa-dbms/lib/commons-codec-1.15-tests.jar"/>
+	<classpathentry kind="lib" path="dmwa-dbms/lib/commons-codec-1.15.jar"/>
+	<classpathentry kind="lib" path="dmwa-dbms/lib/commons-io-2.11.0-javadoc.jar"/>
+	<classpathentry kind="lib" path="dmwa-dbms/lib/commons-io-2.11.0-sources.jar"/>
+	<classpathentry kind="lib" path="dmwa-dbms/lib/commons-io-2.11.0-test-sources.jar"/>
+	<classpathentry kind="lib" path="dmwa-dbms/lib/commons-io-2.11.0-tests.jar"/>
+	<classpathentry kind="lib" path="dmwa-dbms/lib/commons-io-2.11.0.jar"/>
+	<classpathentry kind="lib" path="dmwa-dbms/lib/json-20210307.jar"/>
+	<classpathentry kind="output" path="dmwa-dbms/bin"/>
+</classpath>

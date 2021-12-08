@@ -5,6 +5,7 @@ import common.Utility;
 import log_management.Log;
 import login.User;
 import queries.query_validation.*;
+import transaction.Transaction;
 
 public class QueryIdentifier {
 
@@ -23,8 +24,9 @@ public class QueryIdentifier {
         this.query = query;
     }
 
-    public void run(){
-
+    public void run(boolean commitFlag, Transaction tx){
+    	try {
+    		
         String error= "";
         String query_for_condition = query.toLowerCase();
         if(query_for_condition.startsWith("create database")){
@@ -95,10 +97,9 @@ public class QueryIdentifier {
 
                 if(!Utility.is_not_null_empty(error)){ 
                     Insert executor = new Insert();
-                    Boolean isSuccess = executor.execute(table, workfolder_in_db);
+                    Boolean isSuccess = executor.execute(table, workfolder_in_db, commitFlag, tx);
                     if(isSuccess){
                         String result = table.getValues().size()+ " row(s) inserted successfully";
-                        System.out.println(result);
                         new Log(user, DatabaseOperation.INSERT, selected_database, table.getTable_name(), query, result);
                     }  
                 }
@@ -127,10 +128,10 @@ public class QueryIdentifier {
 
                 if(!Utility.is_not_null_empty(error)){ 
                     UpdateTable executor = new UpdateTable();
-                    Boolean isSuccess = executor.execute(table, workfolder_in_db);
+                    Boolean isSuccess = executor.execute(table, workfolder_in_db, commitFlag, tx);
                     if(isSuccess) {
                         String result = table.getValues().size()+" rows updated successfully";
-                        System.out.println(result);
+//                        System.out.println(result);
                         new Log(user, DatabaseOperation.UPDATE, selected_database, table.getTable_name(), query, result);
                     }  
                 }
@@ -143,7 +144,7 @@ public class QueryIdentifier {
                 if(!Utility.is_not_null_empty(error)){ 
                     int rows_before_deletion = table.getValues().size();
                     DeleteFromTable executor = new DeleteFromTable();
-                    Boolean isSuccess = executor.execute(table, workfolder_in_db);
+                    Boolean isSuccess = executor.execute(table, workfolder_in_db, commitFlag, tx);
                     if(isSuccess) {
                         int rows_after_deletion = table.getValues().size();
                         String result = (rows_before_deletion-rows_after_deletion)+" rows deleted successfully";
@@ -173,11 +174,14 @@ public class QueryIdentifier {
         }
         
 
-        if(Utility.is_not_null_empty(error)){
-            System.out.println("\n\n\t\t\t*********** Error Occurred ************\t\t\t\n");
-            System.out.println(error);
-            System.out.println("\n\n\t\t\t*********** End ************\t\t\t\n");
-        }
+	        if(Utility.is_not_null_empty(error)){
+	            System.out.println("\n\n\t\t\t*********** Error Occurred ************\t\t\t\n");
+	            System.out.println(error);
+	            System.out.println("\n\n\t\t\t*********** End ************\t\t\t\n");
+	        }
+    	} catch(Exception e) {
+    		tx.rollback();
+    	}
     }
 
 

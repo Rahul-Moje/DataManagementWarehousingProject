@@ -6,6 +6,8 @@ import java.io.Console;
 import common.Utility;
 import login.User;
 import queries.query_execution.QueryIdentifier;
+import transaction.DefaultTransactionManager;
+import transaction.Transaction;
 
 public class QueryDriver {
 
@@ -19,7 +21,7 @@ public class QueryDriver {
 
     public void run() {
         
-        String single_or_transaction = Utility.enter_in_console("Select option 1/2/3: \n"
+        String single_or_transaction = Utility.enter_in_console("Select option 1/2: \n"
         +"1. Query\n"
         +"2. See Query Guide", console);
 
@@ -37,28 +39,66 @@ public class QueryDriver {
 
     private void query_execution() {
 
-        String query="";
-        QueryIdentifier queryIdentifier= new QueryIdentifier(query, user);;
+        String queryInput="";
+        QueryIdentifier queryIdentifier= new QueryIdentifier(queryInput, user);;
 
         do{
-            query= Utility.enter_in_console("Enter query or press 1 to go back to previous menu and 2 to go back to main menu:", console);
-            if(query.equals("1")){
+            queryInput= Utility.enter_in_console("Enter query or press 1 to go back to previous menu and 2 to go back to main menu:", console);
+            if(queryInput.equals("1")){
                 run();
-            }
-            if(query.equals("2")){
                 break;
             }
-            if(!query.toLowerCase().startsWith("start trasaction")){
-                queryIdentifier.setQuery(query);
-                queryIdentifier.run();
-                continue;
+            if(queryInput.equals("2")){
+                break;
             }
-            else{
-                //transaction_execution
+            boolean isTxn = isQueryTransactional(queryInput);
+            
+            String[] queryList =  queryInput.split(";");
+            
+            Transaction tx = DefaultTransactionManager.getTransaction();
+            for(int i =0; i< queryList.length; i++) {
+                String query = queryList[i];
+                if(query == null || query.length() < 15  ) {
+                    continue;
+                }
+                if(!isTxn){
+                    queryIdentifier.setQuery(query);
+                    queryIdentifier.run(true, tx);
+                    continue;
+                }
+                else{
+
+                    //transaction_execution
+                    //Generate random number as transaction id
+                    
+                    //Loop over queryList and snd true for last query
+                    queryIdentifier.setQuery(query);
+                    //give true to last query from query list or else give false
+                    if(i != queryList.length -1)
+                    	queryIdentifier.run(false, tx);
+                    else
+                    	queryIdentifier.run(true, tx);
+                }
+
             }
         }
-        while(!query.equals("1") && !query.equals("2"));
+        while(!queryInput.equals("1") && !queryInput.equals("2"));
         
+    }
+
+    private boolean isQueryTransactional(String query) {
+        String[] queries =query.split(";");
+        int dmlCount = 0;
+        for(String q: queries) {
+        	String tmp = q.toLowerCase();
+        	if(tmp.startsWith("insert into")
+        			|| tmp.startsWith("update")
+        			|| tmp.startsWith("delete from"))
+        		dmlCount++;
+        	if(dmlCount >=2) return true;
+        		
+        }
+        return false;
     }
 
     private void transaction_execution() {

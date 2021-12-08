@@ -6,8 +6,13 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.io.IOUtils;
@@ -16,6 +21,37 @@ import queries.query_execution.Table;
 import queries.query_execution.TableMetaData;
 
 public class Utility {
+	
+	public static void main(String[] args) {
+		String str = "srno~name\r\n" + 
+				"1~www\r\n" + 
+				"2~eee\r\n" + 
+				"3~Ruhi\r\n" + 
+				"4~Sai\r\n" + 
+				"5~samsung\r\n" + 
+				"6~iphone\r\n" + 
+				"7~Rina\r\n" + 
+				"8~Mina\r\n" + 
+				"";
+		String[] rows = str.split("\r\n");
+		
+		String[] headers = null;
+		if(rows.length > 0) {
+			headers = rows[0].split("~");
+			System.out.println(Arrays.toString(headers));
+		}
+		List<Map<String,String>> data = new ArrayList<>();
+			for(int i=1; i< rows.length; i++) {
+				Map<String, String> map = new HashMap<>();
+				
+				String[] cells = rows[i].split("~");
+				for(int j=0; j< headers.length; j++) {
+					map.put(headers[j], cells[j]);
+				}
+				data.add(map);
+			}
+			System.out.println(data);
+	}
 
     public static void sleep(int seconds){
         try {
@@ -36,7 +72,9 @@ public class Utility {
         String input= "";
         while(!isSure){
             System.out.println(question);
-            input= console.readLine();
+            //input= console.readLine();
+            Scanner scanner= new Scanner(System.in);
+            input = scanner.nextLine();
             if(!is_not_null_empty(input)){
                 System.out.println("Input cannot be blank. Enter again.");
                 return enter_in_console(question, console);
@@ -104,6 +142,10 @@ public class Utility {
 
         }
         return null;
+    }
+
+    public static Long generateTransaction() {
+        return ThreadLocalRandom.current().nextLong(1000, Long.MAX_VALUE);
     }
     
 }
