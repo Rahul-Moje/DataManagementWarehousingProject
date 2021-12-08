@@ -17,6 +17,13 @@ public class DeleteFromTable {
     }
     
     
+    
+    /** 
+     * @param txn
+     * @param table
+     * @param file_path
+     * @return List<HashMap<String, String>>
+     */
     public List<HashMap<String,String>> getRecentData(Transaction txn, Table table, String file_path) {
 		String txnData = txn.getTempData().get(file_path);
 		if(txnData == null) return table.getValues();
@@ -40,6 +47,15 @@ public class DeleteFromTable {
 			return data;
 	}
 
+    
+    /** 
+     * delete the rows from table where condition matches
+     * @param table
+     * @param workfolder_in_db
+     * @param commitFlag
+     * @param tx
+     * @return Boolean
+     */
     public Boolean execute(Table table, String workfolder_in_db, boolean commitFlag, Transaction tx) {
         
         try{

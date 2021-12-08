@@ -23,6 +23,14 @@ public class CreateTableValidation {
         util = new QueryValidationUtility();
     }
 
+    
+    /** 
+     * validate create table query
+     * @param query
+     * @param workspace_folder
+     * @param table
+     * @return String
+     */
     public String validate(String query, String workspace_folder, Table table) {
 
         query = util.removeLastSemiColon(query);
@@ -69,8 +77,15 @@ public class CreateTableValidation {
     }
 
 
+    
+    /** 
+     * validate foreign keys
+     * @param table
+     * @param workspace_folder
+     * @return String
+     */
     private String validate_foreign_keys(Table table, String workspace_folder) {
-        // List<TableMetaData> tables_metadata = RetrieveTableInfo.getTables(workspace_folder);
+
         HashMap<String, TableMetaData> table_to_metadata = RetrieveTableInfo.getMapOfTableNameToInfo(workspace_folder);
         HashMap<String,HashMap<String,String>> column_to_referencetable_to_column = table.getColumn_to_referencetable_to_column();
         if(column_to_referencetable_to_column!=null && column_to_referencetable_to_column.size()>0){
@@ -78,10 +93,8 @@ public class CreateTableValidation {
                 String datatype_of_main_tablecol = table.getColumn_to_datatype().get(fk);
                 HashMap<String,String> table_col = column_to_referencetable_to_column.get(fk);
                 for(String referenced_table: table_col.keySet()){
-                    // System.out.println("---referenced_table---"+referenced_table);
-                    String refereneced_column = table_col.get(referenced_table);
 
-                    // System.out.println("---refereneced_column---"+refereneced_column);
+                    String refereneced_column = table_col.get(referenced_table);
                     if(!table_to_metadata.containsKey(referenced_table)){
                         return referenced_table+ ": reference table does not exist";
                     }
@@ -102,6 +115,12 @@ public class CreateTableValidation {
         return null;
     }
 
+    
+    /** 
+     * validate primary keys
+     * @param table
+     * @return String
+     */
     private String validate_primary_keys (Table table) {
         if(table.getPrimary_keys()!=null && table.getPrimary_keys().size()>0){
 
@@ -114,6 +133,13 @@ public class CreateTableValidation {
         return null;     
     }
 
+    
+    /** 
+     * validate the table column and data types
+     * @param query
+     * @param table
+     * @return String
+     */
     private String validate_values(String query, Table table) {
         
         try{
@@ -123,7 +149,6 @@ public class CreateTableValidation {
             String str_between_brackets = query.substring(start_index+1, last_index);
             
             Pattern pattern = Pattern.compile("\\(.*?\\)");
-            // Matcher m = pattern.matcher(query);
             
             String[] elements = str_between_brackets.trim().split(",");
             for(String ele : elements){
@@ -135,8 +160,6 @@ public class CreateTableValidation {
                         match_str = (String) match_str.subSequence(1, match_str.length()-1);
                         String[] pkeys = match_str.trim().split(",");
                         Arrays.stream(pkeys).map(String::trim).toArray(unused -> pkeys);
-
-                        // System.out.println("---pkeys--"+pkeys);
                         table.setPrimary_keys(Arrays.asList(pkeys));
                     }
                     else{
@@ -145,38 +168,20 @@ public class CreateTableValidation {
                         
                 }
                 else if(ele.toLowerCase().startsWith("foreign key")){
-                    // String fk_regex = "foreign key [a-zA-z0-9]+ references [a-zA-z0-9]+$[a-zA-z0-9]+$";
-                    // Pattern  foreign_key_pattern = Pattern.compile(fk_regex);
-                    // if(!Pattern.matches(fk_regex, ele.toLowerCase())){
-                    //     return "foreign key syntax error";
-                    // }
-
-                    // System.out.println("----ele---- "+ele);
-                    // Matcher fk_matcher = foreign_key_pattern.matcher(ele.toLowerCase());
-                    // while(fk_matcher.find()){
                     try{
                         String fk_str = ele.toLowerCase();
-                        // System.out.println("----fk_str---- "+fk_str);
                         String fk_temp = fk_str.substring(fk_str.indexOf("foreign key")+"foreign key".length(), 
                                                         fk_str.indexOf("references")).trim();
-                        // System.out.println("---fk_temp--"+fk_temp);
                         String referenced_table = fk_str.substring(fk_str.indexOf("references")+"references".length());
-                        // System.out.println("---referenced_table--"+referenced_table);
                         referenced_table= referenced_table.substring(0, referenced_table.indexOf("(")).trim();
-                        // System.out.println("---referenced_table--"+referenced_table);
                         String referenced_column = fk_str.substring(fk_str.indexOf("(")+1, fk_str.lastIndexOf(")")).trim();
-
-                        // System.out.println("---referenced_column--"+referenced_column);
                         column_to_referencetable_to_column.put(fk_temp, new HashMap<>());
                         column_to_referencetable_to_column.get(fk_temp).put(referenced_table, referenced_column);
-
-                        // System.out.println("---column_to_referencetable_to_column--- "+column_to_referencetable_to_column.toString());
                     }
                     catch(Exception e){
                         e.printStackTrace();
                         return "foreign key syntax error";
                     }
-
                 }
                 else{
                     String[] column_and_datatype = ele.trim().split(" ");

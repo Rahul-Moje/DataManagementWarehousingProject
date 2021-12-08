@@ -18,6 +18,12 @@ import queries.query_execution.TableMetaData;
 
 public class QueryValidationUtility {
     
+    
+    /** 
+     * remove semicolon from the end
+     * @param query
+     * @return String
+     */
     public String removeLastSemiColon(String query){
         if(query.endsWith(";")){
             query = query.substring(0, query.length()-1);
@@ -25,6 +31,12 @@ public class QueryValidationUtility {
         return query;
     }
 
+    
+    /** 
+     * return the string token
+     * @param query
+     * @return List<String>
+     */
     public List<String> queryTokens(String query){
         List<String> tokens = new ArrayList<String>();
         StringTokenizer tokenizer = new StringTokenizer(query, " ");
@@ -34,6 +46,13 @@ public class QueryValidationUtility {
         return tokens;
     }
 
+    
+    /** 
+     * check if database exists
+     * @param db_name
+     * @param workspace_folder
+     * @return String
+     */
     public String check_db_exists(String db_name, String workspace_folder){
         String path = ".//workspace//"+workspace_folder+"//"+db_name;
         File file = new File(path);
@@ -43,6 +62,13 @@ public class QueryValidationUtility {
         return null;
     }
 
+    
+    /** 
+     * check if a table exists
+     * @param table
+     * @param workspace_folder
+     * @return String
+     */
     public String check_table_exists(Table table, String workspace_folder) {
         String table_name = table.getTable_name();
         List<TableMetaData> tables_info = RetrieveTableInfo.getTables(workspace_folder);
@@ -65,6 +91,14 @@ public class QueryValidationUtility {
         return null;
     }
 
+    
+    /** 
+     * populate data from file as list of map
+     * @param workfolder_in_db
+     * @param table
+     * @param column_names_from_query
+     * @return String
+     */
     public String populateDataFromFile(String workfolder_in_db, Table table, List<String> column_names_from_query) {
         
         //validate the columns from query with actual ones
@@ -126,42 +160,39 @@ public class QueryValidationUtility {
         return null;
     }
 
+    
+    /** 
+     * validate foreign key
+     * @param table
+     * @param workspace_folder
+     * @return String
+     */
     public String validate_foreign_key_constraint(Table table, String workspace_folder){
 
         HashMap<String,HashMap<String,String>> column_to_referencetable_to_column = table.getColumn_to_referencetable_to_column();
 
         HashMap<String,TableMetaData> table_to_tableinfo= RetrieveTableInfo.getMapOfTableNameToInfo(workspace_folder);
-        // System.out.println("---column_to_referencetable_to_column-- "+column_to_referencetable_to_column);
         if(column_to_referencetable_to_column!=null && column_to_referencetable_to_column.size()>0){
 
             for(String fk: column_to_referencetable_to_column.keySet()){
                 String datatype = table.getColumn_to_datatype().get(fk);
-                // System.out.println("---fk-- "+fk);
                 HashMap<String,String> table_col = column_to_referencetable_to_column.get(fk);
-                // System.out.println("---table_col-- "+table_col);
                 for(String referenced_table: table_col.keySet()){
 
                     String referenced_column = table_col.get(referenced_table);
                     Table table_for_query = new Table();
                     TableMetaData tmd = table_to_tableinfo.get(referenced_table);
-                    // System.out.println("---tmd-- "+tmd.toString());
                     table_for_query.setTable_name(tmd.getTable_name());
                     table_for_query.setColumn_to_datatype(tmd.getCol_datatype());
 
                     populateDataFromFile(workspace_folder, table_for_query, Arrays.asList(referenced_column) );
-                    // System.out.println("---table2 values-- "+table.getValues().toString());
                     for(HashMap<String,String> row: table.getValues()){
                         String value1 = row.get(fk);
-
-                        // System.out.println("---value1 values-- "+value1);
                         int count = 0;
                         for(HashMap<String,String> inner_row: table_for_query.getValues()){
                             String value2 = inner_row.get(referenced_column);
-                            // System.out.println("---value2 values-- "+value2);
                             switch(datatype){
                                 case "nvarchar":
-
-                                    // System.out.println("---nvarchar nvarchar-- ");
                                     if(value1.equalsIgnoreCase(value2)){
                                         ++count;
                                     }
@@ -183,7 +214,6 @@ public class QueryValidationUtility {
                                     }
                                     break;
                                 case "date":
-                                    // System.out.println("---date date-- ");
                                     if(Date.valueOf(value1)==Date.valueOf(value2)){
                                         ++count;
                                     }
@@ -192,7 +222,6 @@ public class QueryValidationUtility {
                                     break;
                             }
                         }
-                        // System.out.println("---count count-- ");
                         if(count == 0){
                             return "Referenced table does not contain the foriegn key";
                         }
@@ -204,6 +233,13 @@ public class QueryValidationUtility {
         return null;
     }
 
+    
+    /** 
+     * validate primary key and unique key
+     * @param table
+     * @param workspace_folder
+     * @return String
+     */
     public String validate_primary_key_constraint(Table table, String workspace_folder) {
         
         Table table_clone = new Table();

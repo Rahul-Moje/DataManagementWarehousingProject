@@ -15,6 +15,14 @@ public class SelectValidation {
         util = new QueryValidationUtility();
     }
 
+    
+    /** 
+     * validate select query
+     * @param query
+     * @param workfolder_in_db
+     * @param table
+     * @return String
+     */
     public String validate(String query, String workfolder_in_db, Table table) {
         
         query = query.toLowerCase();
@@ -38,66 +46,14 @@ public class SelectValidation {
 
     }
 
-    // public String populateDataFromFile(String workfolder_in_db, Table table, List<String> column_names_from_query) {
-        
-    //     //validate the columns from query with actual ones
-    //     for(String col_from_query: column_names_from_query){
-    //         if(!table.getColumn_to_datatype().containsKey(col_from_query)) {
-    //             return "Incorrect columns name: " + col_from_query;
-    //         }
-    //     }
-    //     //end
-
-    //     String path = ".//workspace//"+workfolder_in_db+"//"+table.getTable_name()+Constants.DATA_FILE_EXTENSION;
-    //     String content;
-    //     try {
-    //         content = Utility.fetch_file_content(path);
-    //     } catch (IOException e) {
-    //         e.printStackTrace();
-    //         return "Empty table";
-    //     }
-    //     try{
-    //         if(Utility.is_not_null_empty(content)){
-    //             List<HashMap<String,String>> values = new ArrayList<>();
-    //             List<String> columns = new ArrayList<String>();
-    //             int count = 0;
-    //             String[] rows = content.split(Constants.LINE_SEPARATOR);
-    //             for(String row: rows){
-    //                 String[] cell_data = row.split(Constants.DELIMITER);
-    //                 HashMap<String,String> row_map = new HashMap<>();
-    //                 for(int i = 0; i<cell_data.length; ++i){
-    //                     String val = cell_data[i].trim();
-                        
-    //                     if(count == 0){
-    //                         val = val.toLowerCase();
-    //                         columns.add(val.toLowerCase());
-    //                     }
-    //                     else {
-    //                         String col_name = columns.get(i);
-    //                         if(column_names_from_query.contains(col_name)){
-    //                             //add logic for whereclause
-    //                             row_map.put(col_name, val);
-    //                         }
-    //                     }
-    //                 }
-    //                 if(count > 0){
-    //                     values.add(row_map);
-    //                 }
-    //                 count++;
-                        
-    //             }
-    //             table.setValues(values);
-    //         }
-    //     }
-    //     catch(Exception e){
-    //         e.printStackTrace();
-    //         return "System error";
-    //     }
-        
-    //     // System.out.println("----table------2: "+table.toString());
-    //     return null;
-    // }
-
+    
+    /** 
+     * validate table name
+     * @param query
+     * @param table
+     * @param workspace_folder
+     * @return String
+     */
     private String validateTable(String query, Table table, String workspace_folder) {
         try{
             String table_name="";
@@ -117,6 +73,13 @@ public class SelectValidation {
         
     }
 
+    
+    /** 
+     * create list of columns in the select query
+     * @param query
+     * @param table
+     * @return List<String>
+     */
     private List<String> getColumns(String query, Table table) {
         String coma_separated_columns = query.substring(query.indexOf("select")+6, query.indexOf("from")-1).trim();
 		if(coma_separated_columns.equals("*")){

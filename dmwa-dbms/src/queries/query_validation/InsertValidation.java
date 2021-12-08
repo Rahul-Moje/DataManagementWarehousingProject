@@ -19,6 +19,14 @@ public class InsertValidation {
         util = new QueryValidationUtility();
     }
     
+    
+    /** 
+     * validate insert query
+     * @param query
+     * @param workspace_folder
+     * @param table
+     * @return String
+     */
     public String validate(String query, String workspace_folder, Table table) {
 
         query = util.removeLastSemiColon(query);
@@ -58,6 +66,13 @@ public class InsertValidation {
         
     }
 
+    
+    /** 
+     * validate the values to be inserted
+     * @param query
+     * @param table
+     * @return String
+     */
     private String validate_values(String query, Table table) {
         
         try{
@@ -106,7 +121,6 @@ public class InsertValidation {
                 count++;
             }
             table.setValues(rows);
-            // System.out.println(table.getValues());
         }
         catch(Exception e){
             e.printStackTrace();
@@ -116,6 +130,13 @@ public class InsertValidation {
         return null;
     }
 
+    
+    /** 
+     * validate the table name
+     * @param table
+     * @param workspace_folder
+     * @return String
+     */
     public String checkTable(Table table, String workspace_folder) {
         String table_name = table.getTable_name();
         List<TableMetaData> tables_info = RetrieveTableInfo.getTables(workspace_folder);

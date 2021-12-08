@@ -6,11 +6,12 @@ import java.util.Optional;
 import java.util.Set;
 import org.json.JSONObject;
 
+import common.Constants;
 import common.Utility;
 
 public class UserProfileIO {
 
-    static String file_name = ".//metadata//USER_PROFILE.txt";
+    static String file_name = Constants.USER_ROFILE_PATH;
     static{
         File file = new File(file_name);
         if(!file.exists()) {
@@ -29,6 +30,13 @@ public class UserProfileIO {
         
     }
 
+    
+    /** 
+     * check for dupicate user
+     * add user in the metadata file
+     * @param userLoginDetails
+     * @return LoginRegisterStatus
+     */
     public LoginRegisterStatus add_user(User userLoginDetails) {
             JSONObject file_content;
             try {
@@ -60,6 +68,13 @@ public class UserProfileIO {
             }
     }
 
+    
+    /** 
+     * write in metadata file
+     * @param userLoginDetails
+     * @param file_content
+     * @throws IOException
+     */
     private void write_in_file(User userLoginDetails, JSONObject file_content) throws IOException{
         FileWriter fileWriter = new FileWriter(file_name, false);
         JSONObject value_part = new JSONObject();
@@ -79,6 +94,12 @@ public class UserProfileIO {
 
     }
 
+    
+    /** 
+     * @param username
+     * @param password
+     * @return User
+     */
     public User check_credentials(String username, String password) {
         JSONObject file_content;
         String username_uppercase = username.toUpperCase();

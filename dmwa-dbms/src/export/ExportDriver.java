@@ -54,6 +54,10 @@ public class ExportDriver {
             }
     }
 
+    
+    /** 
+     * @param exportType
+     */
     private void export_SQLDump(String exportType) {
         try {
            String query="CREATE DATABASE "+dbName+";\n";
@@ -133,6 +137,13 @@ public class ExportDriver {
             e.printStackTrace();
         }
     }
+    
+    /** 
+     * @param tableName
+     * @param columnNameList
+     * @param columnTypeList
+     * @return String
+     */
     private String get_InsertedValues(String tableName,ArrayList<String> columnNameList,ArrayList<String> columnTypeList)
     {
         String file_name=".//workspace//"+workspace_folder+"//"+dbName+"//"+tableName+".tsv";
@@ -158,6 +169,14 @@ public class ExportDriver {
             return e.getMessage();
         }   
     }
+    
+    /** 
+     * @param tableName
+     * @param rowData
+     * @param columnNameList
+     * @param columnTypeList
+     * @return String
+     */
     private String get_RowDataFormated(String tableName,String[] rowData,ArrayList<String> columnNameList,ArrayList<String> columnTypeList)
     {
         String inset_Query="INSERT INTO "+tableName+"(";

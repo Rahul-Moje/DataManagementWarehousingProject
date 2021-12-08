@@ -13,10 +13,15 @@ public class Select {
         qUtil = new QueryExecutionUtility();
     }
 
+    
+    /** 
+     * print the column in the select query
+     * @param table
+     * @return Boolean
+     */
     public Boolean execute(Table table) {
         
         try{
-            // LinkedList<LinkedHashMap<String,String>> filterted_rows = new LinkedList<>();
             List<HashMap<String,String>> filterted_rows = new ArrayList<>();
             List<HashMap<String,String>> rows = table.getValues();
             Formatter fmt=new Formatter();
@@ -28,10 +33,11 @@ public class Select {
                 row_for_header= table.getColumn_to_datatype();
             }
             String format  = "%30s ".repeat(row_for_header.keySet().size());
-            System.out.println("\n---------------------------------------------------------------------------------------------");  
+            System.out.println("\n-----------------------------------------------------------------------------------------------------------------------------------------");     
             fmt.format(format, row_for_header.keySet().toArray());
             System.out.println(fmt);  
-            System.out.println("---------------------------------------------------------------------------------------------");
+            System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------");     
+        
 
             if(rows !=null && rows.size()>0){
                 for(int i = 0; i < rows.size(); ++i) {

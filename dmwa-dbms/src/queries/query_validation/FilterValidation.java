@@ -72,6 +72,13 @@ public class FilterValidation {
         ));
     }};
 
+    
+    /** 
+     * validate where clause in the query
+     * @param query
+     * @param table
+     * @return String
+     */
     public String validateWhereClause(String query, Table table){
         
         String where_clause = query.toLowerCase().contains("where") ? query.substring(query.indexOf("where")+5).trim() : "";

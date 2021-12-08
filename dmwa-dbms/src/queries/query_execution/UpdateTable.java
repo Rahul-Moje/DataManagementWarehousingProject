@@ -18,6 +18,13 @@ public class UpdateTable {
         qUtil = new QueryExecutionUtility();
     };
     
+    
+    /** 
+     * @param txn
+     * @param table
+     * @param file_path
+     * @return List<HashMap<String, String>>
+     */
     public List<HashMap<String,String>> getRecentData(Transaction txn, Table table, String file_path) {
 		String txnData = txn.getTempData().get(file_path);
 		if(txnData == null) return table.getValues();
@@ -44,13 +51,22 @@ public class UpdateTable {
 	}
     
 
+    
+    /** 
+     * check for where condition and constraints
+     * update the records as per query
+     * @param table
+     * @param workfolder_in_db
+     * @param commitFlag
+     * @param tx
+     * @return Boolean
+     */
     public Boolean execute(Table table , String workfolder_in_db, boolean commitFlag, Transaction tx) {
 
         try{
             List<HashMap<String,String>> filtered_rows = new ArrayList<>();
             String file_path = ".//workspace//"+workfolder_in_db+"//"+table.getTable_name()+Constants.DATA_FILE_EXTENSION;
             List<HashMap<String,String>> rows = getRecentData(tx, table, file_path);
-            //Map<String,String> updatedRows = new HashMap<>();
             //for primary key validation
             List<String> pk_values = new ArrayList<>();
 

@@ -20,10 +20,21 @@ public class QueryIdentifier {
         this.workspace_folder = user.getUsername_encrypted();
     }
 
+    
+    /** 
+     * @param query
+     */
     public void setQuery(String query){
         this.query = query;
     }
 
+    
+    /** 
+     * identify the query and delegate 
+     * the execution of query to appropriate class
+     * @param commitFlag
+     * @param tx
+     */
     public void run(boolean commitFlag, Transaction tx){
     	try {
     		
