@@ -34,6 +34,7 @@ public class LogWriter {
             log_entry.put("query_type", log.getDatabase_operation());
             log_entry.put("query", log.getQuery());
             log_entry.put("result", log.getResult());
+            log_entry.put("error", log.getError());
 
             file_content.put(log_entry);
             fileWriter.write(file_content.toString());

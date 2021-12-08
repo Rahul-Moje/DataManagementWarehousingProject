@@ -14,9 +14,10 @@ public class Log {
     String table_name;
     String query;
     String result;
+    String error;
 
 
-    public Log(User user, DatabaseOperation database_operation, String database, String table_name, String query, String result) {
+    public Log(User user, DatabaseOperation database_operation, String database, String table_name, String query, String result, String error) {
         this.user = user;
         this.timestamp = LocalDateTime.now();
         this.database_operation = database_operation;
@@ -24,7 +25,7 @@ public class Log {
         this.table_name = table_name;
         this.query = query;
         this.result = result;
-
+        this.error = error;
         LogWriter.write(this);
     }
 
@@ -158,6 +159,20 @@ public class Log {
      */
     public void setResult(String result) {
         this.result = result;
+    }
+
+    /** 
+     * @return String
+     */
+    public String getError() {
+        return error;
+    }
+
+    /** 
+     * @param error
+     */
+    public void setError(String error) {
+        this.error = error;
     }
 
 }

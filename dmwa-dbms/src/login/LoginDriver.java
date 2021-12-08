@@ -55,7 +55,8 @@ public class LoginDriver {
             new Log(user,
                     DatabaseOperation.LOGIN, 
                     "login", "", "",
-                    user.getUsername_plain() + " logged in successfully"
+                    user.getUsername_plain() + " logged in successfully",
+                    ""
             );
 
             successful_login();

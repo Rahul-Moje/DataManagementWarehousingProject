@@ -124,7 +124,7 @@ public class AnalyticsDriver {
      * @throws IOException
      */
     private JSONArray readSystemLogs() throws IOException {
-        String file_content_str = Utility.fetch_file_content(FILE_DIRECTORY + "\\" + user.getUsername_encrypted() + "\\logs\\system.logs");
+        String file_content_str = Utility.fetch_file_content(FILE_DIRECTORY + "//" + user.getUsername_encrypted() + "//logs//system.logs");
         if(Utility.is_not_null_empty(file_content_str)) {
             return new JSONArray(file_content_str);
         }
