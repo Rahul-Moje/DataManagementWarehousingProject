@@ -22,24 +22,24 @@ public class UpdateTable {
 		String txnData = txn.getTempData().get(file_path);
 		if(txnData == null) return table.getValues();
 
-		String[] rows = txnData.split("\r\n");
+		String[] rows = txnData.split(Constants.LINE_SEPARATOR);
 		
 		String[] headers = null;
 		if(rows.length > 0) {
-			headers = rows[0].split("~");
+			headers = rows[0].split(Constants.DELIMITER);
 			System.out.println(Arrays.toString(headers));
 		}
 		List<HashMap<String,String>> data = new ArrayList<>();
 			for(int i=1; i< rows.length; i++) {
 				HashMap<String, String> map = new HashMap<>();
 				
-				String[] cells = rows[i].split("~");
+				String[] cells = rows[i].split(Constants.DELIMITER);
 				for(int j=0; j< headers.length; j++) {
 					map.put(headers[j], cells[j]);
 				}
 				data.add(map);
 			}
-			System.out.println(data);
+			// System.out.println(data);
 			return data;
 	}
     
@@ -47,7 +47,7 @@ public class UpdateTable {
     public Boolean execute(Table table , String workfolder_in_db, boolean commitFlag, Transaction tx) {
 
         try{
-            List<HashMap<String,String>> filterted_rows = new ArrayList<>();
+            List<HashMap<String,String>> filtered_rows = new ArrayList<>();
             String file_path = ".//workspace//"+workfolder_in_db+"//"+table.getTable_name()+Constants.DATA_FILE_EXTENSION;
             List<HashMap<String,String>> rows = getRecentData(tx, table, file_path);
             //Map<String,String> updatedRows = new HashMap<>();
@@ -120,9 +120,9 @@ public class UpdateTable {
                     }
                 }
 
-                filterted_rows.add(row);
+                filtered_rows.add(row);
             }
-            table.setValues(filterted_rows);
+            table.setValues(filtered_rows);
             return qUtil.insertData(table, workfolder_in_db, true, commitFlag, tx);
         }
         catch(Exception e){

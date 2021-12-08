@@ -94,6 +94,9 @@ public class QueryValidationUtility {
                     HashMap<String,String> row_map = new HashMap<>();
                     for(int i = 0; i<cell_data.length; ++i){
                         String val = cell_data[i].trim();
+                        if(val.startsWith("\"") || val.startsWith("'")){
+                            val = val.substring(1, val.length()-1);
+                        }
                         
                         if(count == 0){
                             val = val.toLowerCase();

@@ -100,9 +100,5 @@ public class QueryDriver {
         }
         return false;
     }
-
-    private void transaction_execution() {
-        
-    }
     
 }

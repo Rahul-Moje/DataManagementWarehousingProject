@@ -68,15 +68,16 @@ public class Utility {
 
     public static String enter_in_console(String question, Console console){
         
+        Scanner scanner= new Scanner(System.in);
         boolean isSure = false;
         String input= "";
         while(!isSure){
             System.out.println(question);
             //input= console.readLine();
-            Scanner scanner= new Scanner(System.in);
             input = scanner.nextLine();
             if(!is_not_null_empty(input)){
                 System.out.println("Input cannot be blank. Enter again.");
+                scanner.close();
                 return enter_in_console(question, console);
             }
 
@@ -84,6 +85,7 @@ public class Utility {
             //isSure= console.readLine().equalsIgnoreCase("Y") ? true : false;
             isSure = true;
         }
+        scanner.close();
         return input;
     }
 

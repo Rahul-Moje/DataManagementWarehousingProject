@@ -130,8 +130,8 @@ public class QueryIdentifier {
                     UpdateTable executor = new UpdateTable();
                     Boolean isSuccess = executor.execute(table, workfolder_in_db, commitFlag, tx);
                     if(isSuccess) {
-                        String result = table.getValues().size()+" rows updated successfully";
-//                        System.out.println(result);
+                        String result = "Rows updated successfully";
+                        System.out.println(result);
                         new Log(user, DatabaseOperation.UPDATE, selected_database, table.getTable_name(), query, result);
                     }  
                 }
@@ -140,7 +140,6 @@ public class QueryIdentifier {
                 Table table = new Table();
                 DeleteFromTableValidation validator = new DeleteFromTableValidation();
                 error = validator.validate(query, workfolder_in_db, table);
-
                 if(!Utility.is_not_null_empty(error)){ 
                     int rows_before_deletion = table.getValues().size();
                     DeleteFromTable executor = new DeleteFromTable();

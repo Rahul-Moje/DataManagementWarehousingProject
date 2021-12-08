@@ -19,7 +19,6 @@ public class AnalyticsDriver {
     private User user;
     private UseDatabaseValidation useDatabaseValidation;
     private static String FILE_DIRECTORY = ".//workspace";
-    private String REGEX = "\".*\"";
     private StringBuilder stringBuilder;
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd_HHmmss");
 

@@ -91,7 +91,7 @@ public class InsertValidation {
 
 
                         //check for not null
-                        if(table.getUnique_columns().contains(column)){
+                        if(table.getNot_null_columns().contains(column)){
                             if(val==null || val.trim().isEmpty()){
                                 return "not null constraint";
                             }
