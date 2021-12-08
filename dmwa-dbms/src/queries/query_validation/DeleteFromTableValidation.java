@@ -14,6 +14,14 @@ public class DeleteFromTableValidation {
         util = new QueryValidationUtility();
     }
 
+    
+    /** 
+     * validate delete from query
+     * @param query
+     * @param workfolder_in_db
+     * @param table
+     * @return String
+     */
     public String validate(String query, String workfolder_in_db, Table table) {
         
         query = util.removeLastSemiColon(query);

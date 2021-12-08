@@ -7,6 +7,12 @@ import java.util.StringTokenizer;
 
 public class ExistingDatabseValidation {
 
+    
+    /** 
+     * @param query
+     * @param workspace_folder
+     * @return String
+     */
     public String validate(String query, String workspace_folder) {
        
         if(query.endsWith(";")){
@@ -26,6 +32,12 @@ public class ExistingDatabseValidation {
         }
     }
 
+    
+    /** 
+     * @param db_name
+     * @param workspace_folder
+     * @return String
+     */
     public String check_db_exists(String db_name, String workspace_folder){
         String path = ".//workspace//"+workspace_folder+"//"+db_name;
         File file = new File(path);

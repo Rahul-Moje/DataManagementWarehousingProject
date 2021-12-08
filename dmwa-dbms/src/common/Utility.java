@@ -22,7 +22,11 @@ import queries.query_execution.TableMetaData;
 
 public class Utility {
 	
-	public static void main(String[] args) {
+	
+    /** 
+     * @param args
+     */
+    public static void main(String[] args) {
 		String str = "srno~name\r\n" + 
 				"1~www\r\n" + 
 				"2~eee\r\n" + 
@@ -53,6 +57,10 @@ public class Utility {
 			System.out.println(data);
 	}
 
+    
+    /** 
+     * @param seconds
+     */
     public static void sleep(int seconds){
         try {
             TimeUnit.SECONDS.sleep(seconds);
@@ -66,14 +74,20 @@ public class Utility {
         System.exit(0);
     }
 
+    
+    /** 
+     * @param question
+     * @param console
+     * @return String
+     */
     public static String enter_in_console(String question, Console console){
         
+        Scanner scanner= new Scanner(System.in);
         boolean isSure = false;
         String input= "";
         while(!isSure){
             System.out.println(question);
             //input= console.readLine();
-            Scanner scanner= new Scanner(System.in);
             input = scanner.nextLine();
             if(!is_not_null_empty(input)){
                 System.out.println("Input cannot be blank. Enter again.");
@@ -87,10 +101,19 @@ public class Utility {
         return input;
     }
 
+    
+    /** 
+     * @param input_str
+     * @return boolean
+     */
     public static boolean is_not_null_empty(String input_str) {
         return input_str != null && !input_str.trim().isEmpty();
     }
 
+    
+    /** 
+     * @param file_path
+     */
     public static void check_create_file_path(String file_path) {
         File file = new File(file_path);
         if(!file.exists()){
@@ -99,6 +122,10 @@ public class Utility {
             
     }
 
+    
+    /** 
+     * @param directory
+     */
     public static void check_create_directory(String directory) {
         File file = new File(directory);
         if(!file.exists()){
@@ -107,6 +134,12 @@ public class Utility {
             
     }
 
+    
+    /** 
+     * @param file_name
+     * @return String
+     * @throws IOException
+     */
     public static String fetch_file_content(String file_name) throws IOException{
         File file = new File(file_name);
         if (file.exists()){
@@ -120,6 +153,12 @@ public class Utility {
         return null;
     }
 
+    
+    /** 
+     * @param file_path
+     * @param content
+     * @throws IOException
+     */
     public static void write(String file_path, String content) throws IOException{
         // content = content.trim();
         FileWriter fileWriter = new FileWriter(file_path, false);
@@ -129,6 +168,12 @@ public class Utility {
 
     }
 
+    
+    /** 
+     * @param table
+     * @param workspace_folder
+     * @return String
+     */
     public static String return_if_foreign_key(Table table, String workspace_folder) {
         List<TableMetaData> tables_info = RetrieveTableInfo.getTables(workspace_folder);
 
@@ -144,6 +189,10 @@ public class Utility {
         return null;
     }
 
+    
+    /** 
+     * @return Long
+     */
     public static Long generateTransaction() {
         return ThreadLocalRandom.current().nextLong(1000, Long.MAX_VALUE);
     }

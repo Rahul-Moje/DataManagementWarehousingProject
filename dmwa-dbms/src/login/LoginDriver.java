@@ -18,10 +18,17 @@ public class LoginDriver {
         log_writer = new LogWriter();
     }
 
+    
+    /** 
+     * @param args
+     */
     public static void main(String[] args) {
         form();
     }
 
+    /** 
+     * form for login and registeration
+     */
     private static void form() {
 
         String input_for_login_registration = userInput.input_for_login_registration();
@@ -37,6 +44,9 @@ public class LoginDriver {
 
     }
 
+    /** 
+     * method for login opeartions
+     */
     private static void login_workflow() {
 
         if(userInput.login()){
@@ -56,7 +66,9 @@ public class LoginDriver {
 
     }
 
-
+    /** 
+     * method for after-successful-login operations
+     */
     public static void successful_login(){
         String dbms_option = userInput.select_dbms_operation();
         if(dbms_option.equals("1")){

@@ -1,14 +1,9 @@
 package queries.query_execution;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import common.Constants;
 import common.Utility;
@@ -16,8 +11,20 @@ import transaction.Transaction;
 
 public class QueryExecutionUtility {
 
-    public Boolean insertData(Table table, String workfolder_in_db, Boolean rewrite,//insert-false;delete,update-true for rewrite 
-    											boolean commitFlag, Transaction txn) { //commitFlag, txn added by JS,RT.
+
+    
+    /** 
+     * insert data into the table's tsv file
+     * @param table
+     * @param workfolder_in_db
+     * @param rewrite
+     * @param commitFlag
+     * @param txn
+     * @return Boolean
+     */
+    public Boolean insertData(Table table, String workfolder_in_db, Boolean rewrite, 
+    											boolean commitFlag, Transaction txn) {
+
         HashMap<String,String> col_datatype = table.getColumn_to_datatype();
         String line_separator = System.getProperty("line.separator");
         
@@ -34,7 +41,6 @@ public class QueryExecutionUtility {
             if(!Utility.is_not_null_empty(file_content_str) || rewrite) {
                 data = String.join(Constants.DELIMITER, col_datatype.keySet());
                 data+=line_separator;
-                // System.out.println("---data first---- "+data);
             }
             else {
                 data = file_content_str;
@@ -62,7 +68,6 @@ public class QueryExecutionUtility {
                     }
                     data += Constants.DELIMITER;
                 }
-                // System.out.println("---data last---- "+data);
                 data = data.substring(0, data.length()-1)+line_separator;
             }
         } catch (Exception e) {///exception handling added by JS
@@ -86,6 +91,13 @@ public class QueryExecutionUtility {
         return true;
     }
 
+    
+    /** 
+     * evaluate true if the condition matches
+     * @param row
+     * @param table
+     * @return boolean
+     */
     public boolean check_where_condition(HashMap<String,String> row, Table table) {
 
         try{

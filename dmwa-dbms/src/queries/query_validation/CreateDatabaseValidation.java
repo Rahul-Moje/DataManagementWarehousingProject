@@ -10,6 +10,13 @@ public class CreateDatabaseValidation {
         util = new QueryValidationUtility();
     }
 
+    
+    /** 
+     * validate create database query
+     * @param query
+     * @param workspace_folder
+     * @return String
+     */
     public String validate(String query, String workspace_folder) {
 
         query = util.removeLastSemiColon(query);

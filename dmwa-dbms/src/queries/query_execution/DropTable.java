@@ -8,6 +8,12 @@ import common.Utility;
 
 public class DropTable {
 
+    
+    /** 
+     * @param table
+     * @param workspace_folder
+     * @return Boolean
+     */
     public Boolean execute(Table table, String workspace_folder) {
         
         Boolean isSuccess = removeFromMetaData(table.getTable_name(), workspace_folder);
@@ -19,6 +25,13 @@ public class DropTable {
         
     }
 
+    
+    /** 
+     * remove entry of a table from table_info.tsv metadata file
+     * @param table_name
+     * @param workspace_folder
+     * @return Boolean
+     */
     private Boolean removeFromMetaData(String table_name, String workspace_folder) {
         String path = ".//workspace//"+workspace_folder+"//metadata//table_info"+Constants.DATA_FILE_EXTENSION;
         String final_file_content = "";
@@ -30,12 +43,10 @@ public class DropTable {
                 final_file_content+=rows[0];
                 for(String row: rows){
                     if(count > 0){
-                        // System.out.println("---row---- "+row);
                         String[] cell_data = row.split(Constants.DELIMITER);
-                        // System.out.println("---cell_data---- "+cell_data.toString());
                         String table_name_from_file = cell_data[0];
                         if(!table_name.equalsIgnoreCase(table_name_from_file)){
-                            final_file_content+=Constants.LINE_SEPARATOR+rows[count];//+Constants.LINE_SEPARATOR;
+                            final_file_content+=Constants.LINE_SEPARATOR+rows[count];
                         }
                     }
                     count++;      
@@ -50,10 +61,17 @@ public class DropTable {
         return true;
     }
 
+    
+    /** 
+     * delete table file
+     * @param table_name
+     * @param workspace_folder
+     * @return Boolean
+     */
     private Boolean deleteTableFile(String table_name, String workspace_folder) {
 
         try{
-            String path = ".//workspace//"+workspace_folder+"//"+table_name+".tsv";
+            String path = ".//workspace//"+workspace_folder+"//"+table_name+Constants.DATA_FILE_EXTENSION;
             File f = new File(path);
             f.delete();
         }

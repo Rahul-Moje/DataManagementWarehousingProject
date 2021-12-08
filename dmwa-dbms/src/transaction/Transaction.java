@@ -20,12 +20,25 @@ public final class Transaction {
 		tempData = new LinkedHashMap<>();
 	}
 	
+	
+	/** 
+	 * @return long
+	 */
 	public long getTransactionId() {
 		return transactionId;
 	}
+	
+	/** 
+	 * @return Map<String, String>
+	 */
 	public Map<String, String> getTempData() {
 		return tempData;
 	}
+	
+	/** 
+	 * @param filePath
+	 * @param data
+	 */
 	public void setTempData(String filePath, String data) {
 		tempData.put(filePath, data);
 	}

@@ -20,10 +20,21 @@ public class QueryIdentifier {
         this.workspace_folder = user.getUsername_encrypted();
     }
 
+    
+    /** 
+     * @param query
+     */
     public void setQuery(String query){
         this.query = query;
     }
 
+    
+    /** 
+     * identify the query and delegate 
+     * the execution of query to appropriate class
+     * @param commitFlag
+     * @param tx
+     */
     public void run(boolean commitFlag, Transaction tx){
     	try {
     		
@@ -130,8 +141,8 @@ public class QueryIdentifier {
                     UpdateTable executor = new UpdateTable();
                     Boolean isSuccess = executor.execute(table, workfolder_in_db, commitFlag, tx);
                     if(isSuccess) {
-                        String result = table.getValues().size()+" rows updated successfully";
-//                        System.out.println(result);
+                        String result = "Rows updated successfully";
+                        System.out.println(result);
                         new Log(user, DatabaseOperation.UPDATE, selected_database, table.getTable_name(), query, result);
                     }  
                 }
@@ -140,7 +151,6 @@ public class QueryIdentifier {
                 Table table = new Table();
                 DeleteFromTableValidation validator = new DeleteFromTableValidation();
                 error = validator.validate(query, workfolder_in_db, table);
-
                 if(!Utility.is_not_null_empty(error)){ 
                     int rows_before_deletion = table.getValues().size();
                     DeleteFromTable executor = new DeleteFromTable();

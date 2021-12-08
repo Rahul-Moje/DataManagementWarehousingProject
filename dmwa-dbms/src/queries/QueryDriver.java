@@ -28,9 +28,6 @@ public class QueryDriver {
         if(single_or_transaction.equals("1")){
             query_execution();
         }
-        // else if(single_or_transaction.equals("2")){
-        //     transaction_execution();
-        // }
         else if(single_or_transaction.equals("2")){
             Guide.print_queries_for_reference();
             run();
@@ -87,6 +84,11 @@ public class QueryDriver {
         
     }
 
+    
+    /** 
+     * @param query
+     * @return boolean
+     */
     private boolean isQueryTransactional(String query) {
         String[] queries =query.split(";");
         int dmlCount = 0;
@@ -100,10 +102,6 @@ public class QueryDriver {
         		
         }
         return false;
-    }
-
-    private void transaction_execution() {
-        
     }
     
 }

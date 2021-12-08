@@ -10,12 +10,17 @@ import queries.query_execution.TableMetaData;
 
 public class RetrieveTableInfo {
 
+    
+    /** 
+     * create list of table details
+     * @param workspace_folder
+     * @return List<TableMetaData>
+     */
     public static List<TableMetaData> getTables(String workspace_folder){
         List<TableMetaData> tables = new ArrayList<>();
 
-        String file_path = ".//workspace//%s//metadata//table_info"+Constants.DATA_FILE_EXTENSION;
+        String file_path = Constants.TABLE_INFO_FILE_PATH;
         file_path = String.format(file_path, workspace_folder);
-        // System.out.println("---file_path---- "+file_path);
         String content;
         try {
             content = Utility.fetch_file_content(file_path);
@@ -23,7 +28,6 @@ public class RetrieveTableInfo {
             e.printStackTrace();
             return null;
         }
-        // System.out.println("---content---- "+content);
         try{
             if(Utility.is_not_null_empty(content)){
                 int count = 0;
@@ -82,6 +86,12 @@ public class RetrieveTableInfo {
         return tables;
     }
 
+    
+    /** 
+     * create map of table name to its details- TableMetaData
+     * @param workspace_folder
+     * @return HashMap<String, TableMetaData>
+     */
     public static HashMap<String,TableMetaData> getMapOfTableNameToInfo(String workspace_folder){
 
         List<TableMetaData> tables_info= getTables(workspace_folder);
