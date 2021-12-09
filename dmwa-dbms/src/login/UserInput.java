@@ -7,7 +7,7 @@ import common.Utility;
 
 public class UserInput {
 
-    final Pattern alpha_numeric_pattern = Pattern.compile("^[a-zA-Z0-9]+$");
+    final Pattern alpha_numeric_pattern = Pattern.compile("^[a-zA-Z0-9_@]+$");
 
     static Console console;
     User user;
@@ -78,13 +78,13 @@ public class UserInput {
         while(result == LoginRegisterStatus.USER_ALREADY_EXISTS){
             String username = Utility.enter_in_console("Enter username:", console);
 
-            while(!is_alphanumeric(username)){
+            while(!is_matching_pattern(username)){
                 username = Utility.enter_in_console("Enter username:", console);
             }
             
             String password = Utility.enter_in_console("Enter password:", console);
 
-            while(!is_alphanumeric(password)){
+            while(!is_matching_pattern(password)){
                 password = Utility.enter_in_console("Enter password:", console);
             }
 
@@ -122,10 +122,10 @@ public class UserInput {
      * @param input
      * @return boolean
      */
-    private boolean is_alphanumeric(String input) {
+    private boolean is_matching_pattern(String input) {
         Matcher matcher = alpha_numeric_pattern.matcher(input);
         if(!matcher.matches()){
-            System.out.println("Input should be in apha numeric format.");
+            System.out.println("Input should be in apha numeric format. Special characters allowed are '_' and '@'");
             return false;
         }
         return true;
